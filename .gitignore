@@ -1,0 +1,18 @@
+# ===== Life Ark — allowlist =====
+# Only the PUBLIC website ships to GitHub. Everything else (the paid book,
+# client/work files, source assets, backups, certificates, quizzes) stays LOCAL.
+
+# 1) ignore everything by default
+/*
+
+# 2) keep the public site files
+!/.gitignore
+!/index.html
+!/assets/
+
+# 3) inside assets: ignore all, then keep ONLY the 4 files the site references
+/assets/*
+!/assets/rokoub-sample.pdf
+!/assets/felsala-white.png
+!/assets/felsala-poster.png
+!/assets/life-ark-intake-form.pdf
