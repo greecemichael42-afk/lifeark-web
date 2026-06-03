@@ -8,11 +8,14 @@
 # 2) keep the public site files
 !/.gitignore
 !/index.html
+!/CNAME
 !/assets/
 
-# 3) inside assets: ignore all, then keep ONLY the 4 files the site references
+# 3) inside assets: ignore all, then keep ONLY the files the site references
 /assets/*
 !/assets/rokoub-sample.pdf
 !/assets/felsala-white.png
 !/assets/felsala-poster.png
 !/assets/life-ark-intake-form.pdf
+# 4) extracted page media (de-base64): ship the whole img folder
+!/assets/img/
