@@ -1909,10 +1909,13 @@
     const _lb=document.getElementById('langBtn');
     if(_lb) _lb.addEventListener('click',()=>{ if(sessModal.classList.contains('open')) renderDays(); });
     Array.from(sf.elements).forEach(el=>{ el.addEventListener('input',()=>{ el.style.borderColor=''; }); });
-    window.lifeArkBook=openS;
+    // Booking routes to Cal.com (real availability + automatic slot-locking + Google Calendar sync).
+    // The custom modal/calendar above is kept dormant as a fallback if the Cal trigger is missing.
+    const openCal=()=>{ const t=document.getElementById('calTrigger'); if(t){ t.click(); } else { openS(); } };
+    window.lifeArkBook=openCal;
     const closeS=()=>{ sessModal.classList.remove('open'); document.body.style.overflow=''; };
     document.querySelectorAll('[data-session]').forEach(b=>{
-      b.addEventListener('click',e=>{ e.preventDefault(); openS(b.getAttribute('data-session')); });
+      b.addEventListener('click',e=>{ e.preventDefault(); openCal(); });
     });
     document.getElementById('sessionClose').addEventListener('click',closeS);
     sessModal.addEventListener('click',e=>{ if(e.target===sessModal) closeS(); });
@@ -2109,6 +2112,16 @@
       if(!wasOpen) item.classList.add('open');
     });
   });
+</script>
+
+<!-- ===== Cal.com booking embed =====
+     data-cal-link is Michael's Cal.com username. If the username changes
+     (e.g. to "lifeark"), update the value below. -->
+<button id="calTrigger" data-cal-namespace="lifeark" data-cal-link="michael-greece-18avn3" data-cal-config='{"layout":"month_view"}' aria-hidden="true" tabindex="-1" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none"></button>
+<script>
+(function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+Cal("init", "lifeark", {origin:"https://cal.com"});
+Cal.ns.lifeark("ui", {"theme":"dark","cssVarsPerTheme":{"dark":{"cal-brand":"#D9B675"}},"hideEventTypeDetails":false,"layout":"month_view"});
 </script>
 </body>
 </html>
