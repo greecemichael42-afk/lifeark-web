@@ -81,7 +81,7 @@
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;position:relative;z-index:2}
   .en-sub{display:block;font-family:var(--en);font-style:italic;color:var(--gold);letter-spacing:.04em;opacity:.85;font-weight:500}
   body[data-lang="en"]{direction:ltr}
-  body[data-lang="en"] .lead-ar{font-size:.6em;opacity:.55;font-weight:400;display:block;order:2}
+  body[data-lang="en"] .lead-ar{display:none}
   body[data-lang="en"] .lead-en{display:block;order:1}
   .lead-en{display:none}
   body[data-lang="en"] .ar-only{display:none}
@@ -621,7 +621,7 @@
 </script>
 </head>
 <body data-lang="ar">
-<a class="skip-link" href="#worlds">تخطَّ إلى المحتوى</a>
+<a class="skip-link" href="#worlds"><span class="lead-ar">تخطَّ إلى المحتوى</span><span class="lead-en">Skip to content</span></a>
 <div class="scroll-prog" id="scrollProg"></div>
 <a class="wa-float" href="https://wa.me/201124239057?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20Life%20Ark%20%F0%9F%8C%8A" target="_blank" rel="noopener" aria-label="تواصل معنا عبر واتساب"><span class="wic"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.6-6c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 01-1.9-1.2 7.3 7.3 0 01-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c0-.1-.5-1.3-.7-1.8s-.4-.4-.5-.4h-.5a1 1 0 00-.7.3A2.8 2.8 0 006 9.3c0 1.6 1.2 3.2 1.4 3.4s2.3 3.6 5.6 4.9c2.1.9 2.6.7 3.1.6a2.5 2.5 0 001.7-1.2 2 2 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg></span><span class="wtxt">تواصل معنا</span></a>
 <button class="to-top" id="toTop" aria-label="العودة للأعلى"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
@@ -881,7 +881,7 @@
         <img class="bcimg" src="assets/img/book-cover.jpg" alt="غلاف كتاب رُكوب الموج — مايكل جابي" />
       </div>
       <div class="book-info">
-        <div class="pt">New Release · متاح الآن</div>
+        <div class="pt"><span class="lead-ar">إصدار جديد · متاح الآن</span><span class="lead-en">New Release · Available Now</span></div>
         <h3><span class="lead-ar">رُكوب الموج</span><span class="lead-en">Riding the Wave</span></h3>
         <p class="ar-only" style="color:var(--gold-bright);font-weight:600;margin-bottom:10px">حياةٌ تستحق أن تُعاش — دليل تدريبي لمهارات تنظيم المشاعر في العلاج الجدلي السلوكي DBT</p>
         <p class="lead-en" style="color:var(--gold-bright);font-weight:600;margin-bottom:10px">A training guide for emotion regulation skills in DBT</p>
@@ -891,7 +891,7 @@
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><span class="lead-ar">نسخة PDF رقمية — تحميل فوري</span><span class="lead-en">Digital PDF — instant download</span></span></li>
           <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><span class="lead-ar">تمارين وأوراق عمل قابلة للطباعة</span><span class="lead-en">Printable exercises &amp; worksheets</span></span></li>
         </ul>
-        <div class="book-price"><b>1000 ج.م</b><span class="alt">/ $100 للدفع الدولي</span></div>
+        <div class="book-price"><b><span class="lead-ar">1000 ج.م</span><span class="lead-en">1000 EGP</span></b><span class="alt"><span class="lead-ar">/ $100 للدفع الدولي</span><span class="lead-en">/ $100 international</span></span></div>
         <div class="book-buy">
           <button type="button" class="btn btn-gold" data-order="رُكوب الموج — Riding the Wave"><span class="lead-ar">اطلب الكتاب الآن</span><span class="lead-en">Order the Book</span></button>
           <a href="assets/rokoub-sample.pdf" target="_blank" rel="noopener" class="btn btn-ghost"><span class="lead-ar">اقرأ فصلًا للمعاينة</span><span class="lead-en">Read a Sample Chapter</span></a>
@@ -1647,7 +1647,7 @@
       <a href="https://wa.me/201124239057" target="_blank" rel="noopener" style="direction:ltr;unicode-bidi:plaintext">WhatsApp +20 112 423 9057</a>
     </div>
     <div class="foot-bottom">
-      <div>© 2026 Life Ark · لايف آرك — <span class="en-sub" style="display:inline">A Life Worth Living</span></div>
+      <div>© 2026 Life Ark<span class="lead-ar"> · لايف آرك</span> — <span class="en-sub" style="display:inline">A Life Worth Living</span></div>
       <div><a href="#privacy" style="color:var(--ink-soft);text-decoration:none"><span class="lead-ar">الخصوصية والسرّية</span><span class="lead-en">Privacy &amp; Confidentiality</span></a> · <span class="lead-ar">جميع الحقوق محفوظة</span><span class="lead-en">All rights reserved</span></div>
     </div>
   </div>
