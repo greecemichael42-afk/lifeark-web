@@ -1416,32 +1416,18 @@
             <option value="حضوري / In-person">حضوري / In-person</option>
             <option value="لست متأكدًا / Not sure">لست متأكدًا / Not sure</option>
           </select></div>
-        <div><label><span class="lead-ar">اختر ميعادًا متاحًا</span><span class="lead-en">Pick an available time</span></label>
-          <div class="slotpick" id="slotPick">
-            <div class="sp-tz"><span class="lead-ar">المواعيد بتوقيت القاهرة</span><span class="lead-en">Times shown in Cairo time</span> · <span class="sp-count" id="spCount"></span></div>
-            <div class="sp-days" id="spDays"></div>
-            <div class="sp-times" id="spTimes"></div>
-            <input type="hidden" name="chosenSlot" id="chosenSlot" />
-          </div>
-          <div class="sp-sat" style="margin-top:8px"><span class="lead-ar">السبت مخصّص للجلسات الحضورية بالعيادة — للحجز الحضوري كلّمنا على واتساب.</span><span class="lead-en">Saturdays are reserved for in-person sessions at the clinic — message us on WhatsApp to book in person.</span></div></div>
         <div><label><span class="lead-ar">سبب الحجز باختصار</span><span class="lead-en">Brief reason for booking</span></label>
           <textarea name="reason" placeholder="سطر أو سطرين يكفّوا"></textarea></div>
-        <div><label><span class="lead-ar">طريقة الدفع</span><span class="lead-en">Payment method</span></label>
-          <select name="method" required>
-            <option value="InstaPay">InstaPay</option>
-            <option value="اتصالات كاش / Etisalat Cash">اتصالات كاش / Etisalat Cash</option>
-            <option value="Bank Transfer">تحويل بنكي / Bank Transfer</option>
-          </select></div>
-        <div><label><span class="lead-ar">رقم العملية / المرجع</span><span class="lead-en">Transaction reference</span></label>
-          <input type="text" name="reference" placeholder="رقم العملية بعد التحويل" /></div>
+        <div class="sp-sat"><span class="lead-ar">📅 بعد ما تكمّل بياناتك وتضغط «اختر ميعادك واحجز»، هيفتحلك الكاليندر تختار منه اليوم والساعة وتأكّد الحجز — وبياناتك هتكون متعبّاة تلقائيًا.</span><span class="lead-en">📅 After filling your details and clicking "Pick your time & book", a calendar opens to choose the day & time and confirm — your details are prefilled automatically.</span></div>
+        <div class="sp-sat" style="margin-top:8px"><span class="lead-ar">السبت مخصّص للجلسات الحضورية بالعيادة — للحجز الحضوري كلّمنا على واتساب.</span><span class="lead-en">Saturdays are reserved for in-person sessions at the clinic — message us on WhatsApp to book in person.</span></div>
 
         <label class="check"><input type="checkbox" name="emergency" required /><span class="ar-only">أُقِرّ بأن جلسات العلاج النفسي ليست بديلًا عن خدمات الطوارئ، وأنه في حالات الخطر العاجل أو الأفكار الانتحارية النشطة سأتواصل فورًا مع الطوارئ أو أقرب مستشفى.</span><span class="lead-en">I acknowledge that therapy is not a substitute for emergency services, and in cases of immediate danger or active suicidal thoughts I will contact emergency services or the nearest hospital immediately.</span></label>
 
         <div class="protect-note"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="ar-only">كل ما يُقال أثناء الجلسات سرّي وخاص، ولا يُكشف إلا في الحالات التي ينص عليها القانون والأخلاقيات المهنية.</span><span class="lead-en">Everything shared in sessions is private and confidential, disclosed only in cases required by law and professional ethics.</span></div>
 
-        <button class="btn btn-gold" type="submit"><span class="lead-ar">إرسال طلب الحجز</span><span class="lead-en">Submit Booking Request</span></button>
-        <p class="req-hint ar-only">بعد الإرسال سيُفتح واتساب ببيانات طلبك جاهزة — اضغط إرسال هناك وأرفق صورة الإيصال.</p>
-        <p class="req-hint lead-en">After submitting, WhatsApp opens with your request ready — just send it there and attach the receipt.</p>
+        <button class="btn btn-gold" type="submit"><span class="lead-ar">اختر ميعادك واحجز</span><span class="lead-en">Pick your time &amp; book</span></button>
+        <p class="req-hint ar-only">هيفتحلك الكاليندر تختار الميعاد وتأكّد الحجز. بعد الحجز، حوّل قيمة الجلسة وابعت صورة الإيصال على واتساب.</p>
+        <p class="req-hint lead-en">A calendar opens to pick your time and confirm. After booking, transfer the fee and send the receipt on WhatsApp.</p>
       </form>
     </div>
 
@@ -1900,22 +1886,23 @@
     const openS=(stype)=>{
       if(stype){ const sel=sf.stype; for(const o of sel.options){ if(o.value.indexOf(stype)===0){ sel.value=o.value; break; } } }
       updateFee();
-      refreshSlots();
       Array.from(sf.elements).forEach(el=>{ el.style.borderColor=''; });
       sView.style.display='block'; sDone.style.display='none';
       sessModal.classList.add('open'); document.body.style.overflow='hidden';
     };
     sf.stype.addEventListener('change',updateFee);
     const _lb=document.getElementById('langBtn');
-    if(_lb) _lb.addEventListener('click',()=>{ if(sessModal.classList.contains('open')) renderDays(); });
+    if(_lb) _lb.addEventListener('click',()=>{ if(sessModal.classList.contains('open') && document.getElementById('spDays')) renderDays(); });
     Array.from(sf.elements).forEach(el=>{ el.addEventListener('input',()=>{ el.style.borderColor=''; }); });
-    // Booking routes to Cal.com (real availability + automatic slot-locking + Google Calendar sync).
-    // The custom modal/calendar above is kept dormant as a fallback if the Cal trigger is missing.
-    const openCal=()=>{ const t=document.getElementById('calTrigger'); if(t){ t.click(); } else { openS(); } };
-    window.lifeArkBook=openCal;
+    // Booking flow: this modal (form + payment + acknowledgment) shows FIRST,
+    // then openCal() opens the Cal.com calendar — prefilled with the visitor's details — to pick the time.
+    const openCal=(prefill)=>{ const t=document.getElementById('calTrigger'); if(!t) return;
+      try{ t.setAttribute('data-cal-config', JSON.stringify(Object.assign({layout:'month_view'}, prefill||{}))); }catch(_){ }
+      t.click(); };
+    window.lifeArkBook=openS;
     const closeS=()=>{ sessModal.classList.remove('open'); document.body.style.overflow=''; };
     document.querySelectorAll('[data-session]').forEach(b=>{
-      b.addEventListener('click',e=>{ e.preventDefault(); openCal(); });
+      b.addEventListener('click',e=>{ e.preventDefault(); openS(b.getAttribute('data-session')); });
     });
     document.getElementById('sessionClose').addEventListener('click',closeS);
     sessModal.addEventListener('click',e=>{ if(e.target===sessModal) closeS(); });
@@ -1929,26 +1916,10 @@
       if(!name){ bad(sf.fullname); return; }
       if(!wa){ bad(sf.whatsapp); return; }
       if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ bad(sf.email); return; }
-      if(!chosen.value){ if(spCount){ spCount.classList.add('err'); spCount.textContent=isEN()?'Please pick a time':'اختر ميعادًا من فضلك'; } document.getElementById('slotPick').scrollIntoView({block:'center'}); return; }
-      if(!sf.emergency.checked){ sf.emergency.focus(); return; }
-      const slotLabel=chosenLabel();
-      const msg=encodeURIComponent(
-        '🌊 طلب حجز جلسة من موقع Life Ark\n'+
-        '——————————————\n'+
-        'الاسم: '+name+'\n'+
-        'واتساب: '+wa+'\n'+
-        'البريد الإلكتروني: '+email+'\n'+
-        'نوع الجلسة: '+sf.stype.value+'\n'+
-        'شكل الجلسة: '+sf.format.value+'\n'+
-        'الميعاد المطلوب: '+slotLabel+'\n'+
-        'سبب الحجز: '+((sf.reason.value||'').trim()||'—')+'\n'+
-        'طريقة الدفع: '+sf.method.value+'\n'+
-        'رقم العملية: '+((sf.reference.value||'').trim()||'—')+'\n'+
-        '——————————————\n'+
-        '(سأرفق صورة إيصال الدفع في هذه المحادثة)'
-      );
-      window.open('https://wa.me/'+WA+'?text='+msg,'_blank');
-      sView.style.display='none'; sDone.style.display='block';
+      if(!sf.emergency.checked){ sf.emergency.focus(); sf.emergency.scrollIntoView({block:'center'}); return; }
+      const notes='واتساب: '+wa+' | نوع الجلسة: '+sf.stype.value+' | الشكل: '+sf.format.value+((sf.reason.value||'').trim()?(' | السبب: '+sf.reason.value.trim()):'');
+      closeS();
+      openCal({ name:name, email:email, notes:notes });
     });
   }
 
