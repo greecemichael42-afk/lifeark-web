@@ -15,6 +15,7 @@
 # 3) inside assets: ignore all, then keep ONLY the files the site references
 /assets/*
 !/assets/rokoub-sample.pdf
+!/assets/clear-mind-sample.pdf
 !/assets/felsala-white.png
 !/assets/felsala-poster.png
 !/assets/life-ark-intake-form.pdf
