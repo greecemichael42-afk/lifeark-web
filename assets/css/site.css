@@ -771,6 +771,8 @@
   /* "all articles" gateway card */
   .art-card.art-all{background:linear-gradient(165deg,rgba(217,182,117,.1),rgba(27,48,80,.34));border-color:rgba(217,182,117,.26)}
   .art-card.art-all .art-cap{background:rgba(217,182,117,.08)}
+  /* a single, centered library card on the homepage */
+  .art-grid.art-solo{grid-template-columns:minmax(0,500px);justify-content:center}
   /* articles archive / library page */
   .art-archive{background:linear-gradient(180deg,var(--t950),var(--t900))}
   .art-archive-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,360px));justify-content:center;gap:22px;max-width:1140px;margin:0 auto}
