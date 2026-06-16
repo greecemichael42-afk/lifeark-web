@@ -574,8 +574,19 @@
      Reusable header, sticky pill nav, and alternating sections.
      ============================================================ */
   .page-hero{position:relative;text-align:center;overflow:hidden;border-bottom:1px solid var(--line);
-    padding:clamp(140px,20vh,210px) 0 clamp(64px,9vh,104px);
-    background:radial-gradient(90% 120% at 50% 0,rgba(217,182,117,.13),transparent 55%),linear-gradient(180deg,var(--navy-950),var(--navy-900))}
+    padding:clamp(124px,15vh,172px) 0 clamp(96px,12vh,140px);
+    background:radial-gradient(90% 120% at 50% 0,rgba(217,182,117,.16),transparent 58%),linear-gradient(180deg,var(--navy-950),var(--navy-900))}
+  /* staggered entrance for the sub-page hero — transition-based, so content
+     snaps visible the moment JS adds .in even if motion is throttled/disabled */
+  .page-hero .page-hero-top,.page-hero .crumb,.page-hero .kicker,.page-hero h1,.page-hero .ph-lede,.page-hero .hero-cta{opacity:0;transform:translateY(24px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+  .page-hero.in .page-hero-top,.page-hero.in .crumb,.page-hero.in .kicker,.page-hero.in h1,.page-hero.in .ph-lede,.page-hero.in .hero-cta{opacity:1;transform:none}
+  .page-hero.in .page-hero-top{transition-delay:.05s}
+  .page-hero.in .crumb{transition-delay:.14s}
+  .page-hero.in .kicker{transition-delay:.24s}
+  .page-hero.in h1{transition-delay:.34s}
+  .page-hero.in .ph-lede{transition-delay:.48s}
+  .page-hero.in .hero-cta{transition-delay:.62s}
+  @media(prefers-reduced-motion:reduce){.page-hero .page-hero-top,.page-hero .crumb,.page-hero .kicker,.page-hero h1,.page-hero .ph-lede,.page-hero .hero-cta{opacity:1;transform:none;transition:none}}
   .crumb{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;margin-bottom:18px;font-size:.84rem;color:var(--ink-mute)}
   .crumb a{color:var(--ink-soft);transition:color .3s}
   .crumb a:hover{color:var(--gold)}
