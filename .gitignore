@@ -8,11 +8,11 @@
 # 2) keep the public site files
 !/.gitignore
 !/index.html
-!/demo-sections.html
 !/therapy.html
 !/academy.html
 !/books.html
 !/felsala.html
+!/article-bpd.html
 !/CNAME
 !/assets/
 
