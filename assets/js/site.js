@@ -6,17 +6,18 @@ const hdr=document.getElementById('hdr');
   (function(){ const ph=document.querySelector('.page-hero'); if(!ph) return;
     if(!ph.querySelector('.wave-divider')){ const wd=document.createElement('div'); wd.className='wave-divider bottom'; wd.setAttribute('aria-hidden','true'); wd.innerHTML='<div class="wband w1"></div><div class="wband w2"></div>'; ph.appendChild(wd); }
     ph.classList.add('in');
-    // cinematic hero video: load + play only on desktop with motion allowed; mobile
-    // and reduced-motion keep the still poster image (.ph-photo) and never fetch the mp4.
-    const bigScreen=matchMedia('(min-width:561px)').matches, okMotion=!matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(bigScreen && okMotion){
-      document.querySelectorAll('.ph-video[data-src]').forEach(v=>{
-        const s=document.createElement('source'); s.src=v.dataset.src; s.type='video/mp4'; v.appendChild(s);
-        const go=()=>{ v.classList.add('ready'); const p=v.play(); if(p&&p.catch) p.catch(()=>{}); };
-        v.load();
-        if(v.readyState>=3) go(); else v.addEventListener('canplay',go,{once:true});
-      });
-    }
+  })();
+  // Background videos (homepage hero, sub-page heroes, cinematic section backdrops)
+  // autoplay on every device — phone and desktop alike. Each <video> carries data-src
+  // (no inline <source>), so the mp4 is fetched by JS after the page parses (non-blocking)
+  // and then played; if JS is unavailable it falls back to the poster image.
+  (function(){
+    document.querySelectorAll('video[data-src]').forEach(v=>{
+      const s=document.createElement('source'); s.src=v.dataset.src; s.type='video/mp4'; v.appendChild(s);
+      const go=()=>{ v.classList.add('ready'); const p=v.play(); if(p&&p.catch) p.catch(()=>{}); };
+      v.load();
+      if(v.readyState>=3) go(); else v.addEventListener('canplay',go,{once:true});
+    });
   })();
   const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
@@ -46,7 +47,7 @@ const hdr=document.getElementById('hdr');
     document.documentElement.lang=en?'en':'ar';
     document.documentElement.dir=en?'ltr':'rtl';
     body.dataset.lang=en?'en':'ar'; body.dir=en?'ltr':'rtl'; body.lang=en?'en':'ar';
-    if(langBtn) langBtn.textContent=en?'AR':'EN';
+    if(langBtn){ langBtn.textContent=en?'AR':'EN'; langBtn.lang=en?'ar':'en'; langBtn.setAttribute('aria-label', en?'التبديل إلى العربية':'Switch to English'); }
     // swap placeholders + <select> option labels that carry per-language data attributes
     document.querySelectorAll('[data-ph-ar]').forEach(el=>{ const v=en?el.getAttribute('data-ph-en'):el.getAttribute('data-ph-ar'); if(v!=null) el.setAttribute('placeholder',v); });
     document.querySelectorAll('option[data-ar]').forEach(o=>{ const v=en?o.getAttribute('data-en'):o.getAttribute('data-ar'); if(v!=null) o.textContent=v; });
@@ -59,11 +60,23 @@ const hdr=document.getElementById('hdr');
     applyLang(next);
     try{ localStorage.setItem('lifeark-lang',next); }catch(_){}
   });
-  document.getElementById('mob')?.addEventListener('click',()=>{
-    const n=document.querySelector('.nav-links');
-    const open=n.style.display==='flex';
-    n.style.cssText=open?'':'display:flex;position:absolute;top:88px;right:0;left:0;flex-direction:column;background:rgba(7,14,26,.96);padding:24px 28px;gap:16px;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)';
-  });
+  const mobBtn=document.getElementById('mob');
+  if(mobBtn){
+    const nav=document.querySelector('.nav-links');
+    if(nav && !nav.id) nav.id='primaryNav';
+    mobBtn.setAttribute('aria-label','القائمة');
+    mobBtn.setAttribute('aria-expanded','false');
+    if(nav) mobBtn.setAttribute('aria-controls',nav.id);
+    mobBtn.addEventListener('click',()=>{
+      const open=nav.style.display==='flex';
+      nav.style.cssText=open?'':'display:flex;position:absolute;top:88px;right:0;left:0;flex-direction:column;background:rgba(7,14,26,.96);padding:24px 28px;gap:16px;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)';
+      mobBtn.setAttribute('aria-expanded',open?'false':'true');
+    });
+    // close the open mobile menu when a link inside it is tapped (e.g. same-page #anchors)
+    nav?.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+      if(nav.style.display==='flex'){ nav.style.cssText=''; mobBtn.setAttribute('aria-expanded','false'); }
+    }));
+  }
 
   // ===== creative motion polish =====
   (function(){
@@ -618,3 +631,39 @@ const hdr=document.getElementById('hdr');
       // otherwise the anchor's href="index.html" navigates home
     });
   });
+
+  // ===== modal accessibility: trap Tab inside an open modal, restore focus on close =====
+  // Honors the aria-modal="true" contract on every .modal (including the booking modal
+  // injected earlier): when one opens, focus moves into it and Tab/Shift+Tab cycle only
+  // within it; when it closes, focus returns to whatever opened it. Driven by the `open`
+  // class, so it needs no change to each modal's own open/close handlers. Escape-to-close
+  // is already wired per modal above.
+  (function(){
+    const FOCUSABLE='a[href],area[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+    // only controls that are actually rendered (skips hidden sub-views like *Done panels)
+    const items=(modal)=>[...modal.querySelectorAll(FOCUSABLE)].filter(el=>el.offsetWidth>0||el.offsetHeight>0||el===document.activeElement);
+    document.querySelectorAll('.modal').forEach(modal=>{
+      let trigger=null;
+      new MutationObserver(()=>{
+        if(modal.classList.contains('open')){
+          if(!modal.contains(document.activeElement)) trigger=(document.activeElement instanceof HTMLElement)?document.activeElement:null;
+          // .modal.open is display:flex the moment the class lands, so focus directly —
+          // no requestAnimationFrame (it gets throttled when the tab isn't visible).
+          const f=items(modal), close=modal.querySelector('.modal-close');
+          try{ (close||f[0]||modal).focus(); }catch(_){}
+        } else if(trigger){
+          try{ trigger.focus(); }catch(_){}
+          trigger=null;
+        }
+      }).observe(modal,{attributes:true,attributeFilter:['class']});
+    });
+    document.addEventListener('keydown',e=>{
+      if(e.key!=='Tab') return;
+      const modal=document.querySelector('.modal.open'); if(!modal) return;
+      const f=items(modal); if(!f.length){ e.preventDefault(); return; }
+      const first=f[0], last=f[f.length-1], a=document.activeElement;
+      if(!modal.contains(a)){ e.preventDefault(); first.focus(); }
+      else if(e.shiftKey && a===first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && a===last){ e.preventDefault(); first.focus(); }
+    });
+  })();

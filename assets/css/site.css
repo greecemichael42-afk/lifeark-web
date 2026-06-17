@@ -669,8 +669,9 @@
   .page-hero .ph-video.ready{opacity:1}
   .page-hero .ph-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,14,26,.84),rgba(7,14,26,.5) 42%,rgba(7,14,26,.9))}
   .page-hero.has-media{background:linear-gradient(180deg,var(--navy-950),var(--navy-900))}
-  @media(max-width:560px){.page-hero .ph-video{display:none}}
-  @media(prefers-reduced-motion:reduce){.page-hero .ph-video{display:none}.page-hero .ph-photo{animation:none}}
+  /* background hero videos play on phones too — only the still photo's slow zoom is
+     paused for visitors who ask for reduced motion (the video itself still plays) */
+  @media(prefers-reduced-motion:reduce){.page-hero .ph-photo{animation:none}}
   /* faint cinematic backdrop for ordinary content sections (sits behind the section's
      own gradient + the .wrap content, which already carries z-index:2) */
   .cine-section{overflow:hidden}
