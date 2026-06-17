@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://greecemichael42-afk.github.io/lifeark-web/sitemap.xml
+Sitemap: https://lifearkdbt.com/sitemap.xml
