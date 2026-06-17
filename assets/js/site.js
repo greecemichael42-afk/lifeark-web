@@ -6,6 +6,17 @@ const hdr=document.getElementById('hdr');
   (function(){ const ph=document.querySelector('.page-hero'); if(!ph) return;
     if(!ph.querySelector('.wave-divider')){ const wd=document.createElement('div'); wd.className='wave-divider bottom'; wd.setAttribute('aria-hidden','true'); wd.innerHTML='<div class="wband w1"></div><div class="wband w2"></div>'; ph.appendChild(wd); }
     ph.classList.add('in');
+    // cinematic hero video: load + play only on desktop with motion allowed; mobile
+    // and reduced-motion keep the still poster image (.ph-photo) and never fetch the mp4.
+    const bigScreen=matchMedia('(min-width:561px)').matches, okMotion=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(bigScreen && okMotion){
+      document.querySelectorAll('.ph-video[data-src]').forEach(v=>{
+        const s=document.createElement('source'); s.src=v.dataset.src; s.type='video/mp4'; v.appendChild(s);
+        const go=()=>{ v.classList.add('ready'); const p=v.play(); if(p&&p.catch) p.catch(()=>{}); };
+        v.load();
+        if(v.readyState>=3) go(); else v.addEventListener('canplay',go,{once:true});
+      });
+    }
   })();
   const io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
@@ -27,10 +38,23 @@ const hdr=document.getElementById('hdr');
     addEventListener('scroll',()=>{const y=scrollY;if(amb) amb.style.transform='translateY('+(y*0.12)+'px)';},{passive:true});
   }
   const body=document.body, langBtn=document.getElementById('langBtn');
+  // Persist the visitor's language across pages (localStorage) and keep <html> +
+  // <body> lang/dir in sync — so screen readers and RTL/LTR stay correct, and an
+  // English visitor doesn't get reset to Arabic on every page navigation.
+  const applyLang=(lang)=>{
+    const en=lang==='en';
+    document.documentElement.lang=en?'en':'ar';
+    document.documentElement.dir=en?'ltr':'rtl';
+    body.dataset.lang=en?'en':'ar'; body.dir=en?'ltr':'rtl'; body.lang=en?'en':'ar';
+    if(langBtn) langBtn.textContent=en?'AR':'EN';
+  };
+  let savedLang='ar';
+  try{ savedLang=localStorage.getItem('lifeark-lang')||'ar'; }catch(_){}
+  applyLang(savedLang);
   if(langBtn) langBtn.addEventListener('click',()=>{
-    const en=body.dataset.lang==='en';
-    body.dataset.lang=en?'ar':'en';body.dir=en?'rtl':'ltr';body.lang=en?'ar':'en';
-    langBtn.textContent=en?'EN':'AR';
+    const next=body.dataset.lang==='en'?'ar':'en';
+    applyLang(next);
+    try{ localStorage.setItem('lifeark-lang',next); }catch(_){}
   });
   document.getElementById('mob')?.addEventListener('click',()=>{
     const n=document.querySelector('.nav-links');
@@ -53,7 +77,10 @@ const hdr=document.getElementById('hdr');
     // 2) count-up numbers (auto-detect numeric stats)
     const parse=(t)=>{ const m=t.match(/^(\D*)([\d,]+)(.*)$/); if(!m) return null; const n=parseInt(m[2].replace(/,/g,''),10); return isNaN(n)?null:{pre:m[1],num:n,suf:m[3]}; };
     const fmt=(n)=>n.toLocaleString('en-US');
-    const counters=[...document.querySelectorAll('.cred > b, .hero-stats .st b')].map(el=>{ const p=parse(el.textContent.trim()); return p?{el,p,done:false}:null; }).filter(Boolean);
+    // skip counters that live inside a modal — they're shown on demand (the
+    // scroll-into-view observer can't reach a display:none modal, which would
+    // otherwise freeze them at "0"); the modal shows their real values directly.
+    const counters=[...document.querySelectorAll('.cred > b, .hero-stats .st b')].filter(el=>!el.closest('.modal')).map(el=>{ const p=parse(el.textContent.trim()); return p?{el,p,done:false}:null; }).filter(Boolean);
     if(counters.length && !reduce){
       const run=(o)=>{ const dur=1500, s=performance.now(); const step=(now)=>{ let t=Math.min(1,(now-s)/dur); t=1-Math.pow(1-t,3); o.el.textContent=o.p.pre+fmt(Math.round(o.p.num*t))+o.p.suf; if(t<1) requestAnimationFrame(step); }; requestAnimationFrame(step); };
       const io=new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ const o=counters.find(c=>c.el===e.target); if(o && !o.done){ o.done=true; run(o); } io.unobserve(e.target); } }); },{threshold:.6});
@@ -333,7 +360,11 @@ const hdr=document.getElementById('hdr');
   const aboutModal=document.getElementById('aboutModal');
   const aboutBtn=document.getElementById('aboutBtn');
   if(aboutModal && aboutBtn){
-    const openA=()=>{ aboutModal.classList.add('open'); document.body.style.overflow='hidden'; aboutModal.querySelector('.modal-card').scrollTop=0; };
+    const openA=()=>{ aboutModal.classList.add('open'); document.body.style.overflow='hidden';
+      // reveal-on-scroll can't observe a display:none modal, so make its content
+      // visible the moment it opens (fixes both the numbers and the qualifications).
+      aboutModal.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+      aboutModal.querySelector('.modal-card').scrollTop=0; };
     const closeA=()=>{ aboutModal.classList.remove('open'); document.body.style.overflow=''; };
     aboutBtn.addEventListener('click',openA);
     document.getElementById('aboutClose').addEventListener('click',closeA);

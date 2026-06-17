@@ -616,6 +616,24 @@
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
   .page-hero .ph-lede{max-width:690px;margin:0 auto 30px;color:var(--ink-soft);font-weight:300;font-size:1.12rem}
   .page-hero .hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  /* ===== cinematic video/photo backdrop for sub-page heroes (Gemini-generated) =====
+     ph-photo is the always-present poster/fallback; ph-video fades in over it on
+     desktop only (loaded by JS), so mobile + reduced-motion + no-JS get the still image. */
+  .page-hero .ph-media{position:absolute;inset:0;z-index:0;overflow:hidden}
+  .page-hero .ph-photo,.page-hero .ph-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background-size:cover;background-position:center;background-repeat:no-repeat}
+  .page-hero .ph-video{opacity:0;transition:opacity 1.4s var(--ease)}
+  .page-hero .ph-video.ready{opacity:1}
+  .page-hero .ph-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,14,26,.84),rgba(7,14,26,.5) 42%,rgba(7,14,26,.9))}
+  .page-hero.has-media{background:linear-gradient(180deg,var(--navy-950),var(--navy-900))}
+  @media(max-width:560px){.page-hero .ph-video{display:none}}
+  @media(prefers-reduced-motion:reduce){.page-hero .ph-video{display:none}.page-hero .ph-photo{animation:none}}
+  /* faint cinematic backdrop for ordinary content sections (sits behind the section's
+     own gradient + the .wrap content, which already carries z-index:2) */
+  .cine-section{overflow:hidden}
+  .cine-bg{position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.26;pointer-events:none}
+  video.cine-bg{width:100%;height:100%;object-fit:cover;object-position:center}
+  .cine-bg.soft{opacity:.16}
+  @media(prefers-reduced-motion:reduce){.cine-bg{animation:none}}
   /* sticky in-page pill nav */
   .subnav{position:sticky;top:88px;z-index:30;background:rgba(7,14,26,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
   .subnav .wrap{display:flex;gap:10px;overflow-x:auto;padding:13px 28px;scrollbar-width:none;-ms-overflow-style:none}

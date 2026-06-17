@@ -16,6 +16,8 @@
 !/article-adhd.html
 !/articles.html
 !/CNAME
+!/robots.txt
+!/sitemap.xml
 !/assets/
 
 # 3) inside assets: ignore all, then keep ONLY the files the site references
