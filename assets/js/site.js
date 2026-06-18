@@ -320,8 +320,8 @@ const hdr=document.getElementById('hdr');
         <div class="prow"><b>InstaPay</b><span>sanfor2412@instapay</span></div>
         <div class="prow"><b><span class="lead-ar">اتصالات كاش</span><span class="lead-en">Etisalat Cash</span></b><span>01124239057</span></div>
         <div class="prow"><b><span class="lead-ar">تحويل بنكي</span><span class="lead-en">Bank transfer</span></b><span><span class="lead-ar">تُرسَل عند الطلب</span><span class="lead-en">sent upon request</span></span></div>
-        <p class="pnote ar-only">الحجز لا يُعد مؤكدًا إلا بعد مراجعة الدفع وتأكيد الموعد. أرسل صورة الإيصال على واتساب بعد إرسال الطلب.</p>
-        <p class="pnote lead-en">Your booking is confirmed only after payment review and slot confirmation. Send the receipt screenshot on WhatsApp after submitting.</p>
+        <p class="pnote ar-only">حوّل قيمة الجلسة، وارفع صورة الإيصال في الفورم تحت — الحجز ما يكمّلش من غيرها. ونؤكّد الموعد بعد مراجعة الدفع.</p>
+        <p class="pnote lead-en">Transfer the fee and upload your receipt in the form below — booking can't proceed without it. We confirm the slot after reviewing payment.</p>
       </div>
 
       <form class="order-form" id="sessionForm" novalidate>
@@ -347,6 +347,10 @@ const hdr=document.getElementById('hdr');
           </select></div>
         <div><label><span class="lead-ar">سبب الحجز باختصار</span><span class="lead-en">Brief reason for booking</span></label>
           <textarea name="reason" placeholder="سطر أو سطرين يكفّوا" data-ph-ar="سطر أو سطرين يكفّوا" data-ph-en="A line or two is enough"></textarea></div>
+        <div class="pay-upload"><label><span class="lead-ar">صورة إيصال الدفع (مطلوبة)</span><span class="lead-en">Payment receipt (required)</span></label>
+          <input type="file" name="payment_receipt" accept="image/*,.pdf" required />
+          <p class="req-hint ar-only" style="margin-top:6px">ارفع سكرين التحويل (إنستاباي / اتصالات كاش) — الحجز ما يكمّلش من غيرها.</p>
+          <p class="req-hint lead-en" style="margin-top:6px">Upload your transfer screenshot — booking can't proceed without it.</p></div>
         <div class="sp-sat"><span class="lead-ar">📅 بعد ما تكمّل بياناتك وتضغط «اختر ميعادك واحجز»، هيفتحلك الكاليندر تختار منه اليوم والساعة وتأكّد الحجز — وبياناتك هتكون متعبّاة تلقائيًا.</span><span class="lead-en">📅 After filling your details and clicking "Pick your time & book", a calendar opens to choose the day & time and confirm — your details are prefilled automatically.</span></div>
         <div class="sp-sat" style="margin-top:8px"><span class="lead-ar">السبت مخصّص للجلسات الحضورية بالعيادة — للحجز الحضوري كلّمنا على واتساب.</span><span class="lead-en">Saturdays are reserved for in-person sessions at the clinic — message us on WhatsApp to book in person.</span></div>
 
@@ -355,8 +359,8 @@ const hdr=document.getElementById('hdr');
         <div class="protect-note"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="ar-only">كل ما يُقال أثناء الجلسات سرّي وخاص، ولا يُكشف إلا في الحالات التي ينص عليها القانون والأخلاقيات المهنية.</span><span class="lead-en">Everything shared in sessions is private and confidential, disclosed only in cases required by law and professional ethics.</span></div>
 
         <button class="btn btn-gold" type="submit"><span class="lead-ar">اختر ميعادك واحجز</span><span class="lead-en">Pick your time &amp; book</span></button>
-        <p class="req-hint ar-only">هيفتحلك الكاليندر تختار الميعاد وتأكّد الحجز. بعد الحجز، حوّل قيمة الجلسة وابعت صورة الإيصال على واتساب.</p>
-        <p class="req-hint lead-en">A calendar opens to pick your time and confirm. After booking, transfer the fee and send the receipt on WhatsApp.</p>
+        <p class="req-hint ar-only">بعد ما ترفع الإيصال، هيفتحلك الكاليندر تختار الميعاد وتأكّد الحجز — وبنراجع الدفع ونأكّد حجزك.</p>
+        <p class="req-hint lead-en">After uploading your receipt, a calendar opens to pick your time and confirm — we review payment and confirm your booking.</p>
       </form>
     </div>
 
@@ -434,8 +438,18 @@ const hdr=document.getElementById('hdr');
       if(!name){ bad(sf.fullname); return; }
       if(!wa){ bad(sf.whatsapp); return; }
       if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ bad(sf.email); return; }
+      const receipt=sf.querySelector('input[type=file][name="payment_receipt"]');
+      if(!receipt || !receipt.files || !receipt.files.length){ if(receipt){ receipt.focus(); receipt.style.borderColor='#e0894f'; receipt.scrollIntoView({block:'center'}); } return; }
       if(!sf.emergency.checked){ sf.emergency.focus(); sf.emergency.scrollIntoView({block:'center'}); return; }
       const notes='واتساب: '+wa+' | نوع الجلسة: '+sf.stype.value+' | الشكل: '+sf.format.value+((sf.reason.value||'').trim()?(' | السبب: '+sf.reason.value.trim()):'');
+      // email the booking details + the payment receipt to Life Ark (Formsubmit, multipart so the file attaches)
+      try{
+        const fd=new FormData(sf);
+        fd.append('_subject','طلب حجز جلسة + إيصال دفع — Life Ark');
+        fd.append('_captcha','false');
+        fd.append('_template','table');
+        fetch('https://formsubmit.co/Life.ark.psych@gmail.com',{method:'POST',body:fd,mode:'no-cors'}).catch(function(){});
+      }catch(_){}
       closeS();
       openCal({ name:name, email:email, notes:notes });
     });
