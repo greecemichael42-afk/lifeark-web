@@ -324,7 +324,10 @@ const hdr=document.getElementById('hdr');
         <p class="pnote lead-en">Transfer the fee and upload your receipt in the form below — booking can't proceed without it. We confirm the slot after reviewing payment.</p>
       </div>
 
-      <form class="order-form" id="sessionForm" novalidate>
+      <form class="order-form" id="sessionForm" action="https://formsubmit.co/Life.ark.psych@gmail.com" method="POST" enctype="multipart/form-data" target="lifeark_sink" novalidate>
+        <input type="hidden" name="_subject" value="طلب حجز جلسة + إيصال دفع — Life Ark" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_template" value="table" />
         <div><label><span class="lead-ar">الاسم بالكامل</span><span class="lead-en">Full name</span></label>
           <input type="text" name="fullname" required autocomplete="name" placeholder="الاسم بالكامل" data-ph-ar="الاسم بالكامل" data-ph-en="Full name" /></div>
         <div><label><span class="lead-ar">رقم واتساب</span><span class="lead-en">WhatsApp number</span></label>
@@ -362,6 +365,7 @@ const hdr=document.getElementById('hdr');
         <p class="req-hint ar-only">بعد ما ترفع الإيصال، هيفتحلك الكاليندر تختار الميعاد وتأكّد الحجز — وبنراجع الدفع ونأكّد حجزك.</p>
         <p class="req-hint lead-en">After uploading your receipt, a calendar opens to pick your time and confirm — we review payment and confirm your booking.</p>
       </form>
+      <iframe name="lifeark_sink" title="upload sink" style="display:none" aria-hidden="true"></iframe>
     </div>
 
     <div class="order-done" id="sessionDone">
@@ -430,28 +434,20 @@ const hdr=document.getElementById('hdr');
     sessModal.addEventListener('click',e=>{ if(e.target===sessModal) closeS(); });
     document.addEventListener('keydown',e=>{ if(e.key==='Escape' && sessModal.classList.contains('open')) closeS(); });
     sf.addEventListener('submit',e=>{
-      e.preventDefault();
       const name=(sf.fullname.value||'').trim();
       const wa=(sf.whatsapp.value||'').trim();
       const email=(sf.email.value||'').trim();
       const bad=(el)=>{ el.focus(); el.style.borderColor='#e0894f'; };
-      if(!name){ bad(sf.fullname); return; }
-      if(!wa){ bad(sf.whatsapp); return; }
-      if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ bad(sf.email); return; }
+      if(!name){ e.preventDefault(); bad(sf.fullname); return; }
+      if(!wa){ e.preventDefault(); bad(sf.whatsapp); return; }
+      if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ e.preventDefault(); bad(sf.email); return; }
       const receipt=sf.querySelector('input[type=file][name="payment_receipt"]');
-      if(!receipt || !receipt.files || !receipt.files.length){ if(receipt){ receipt.focus(); receipt.style.borderColor='#e0894f'; receipt.scrollIntoView({block:'center'}); } return; }
-      if(!sf.emergency.checked){ sf.emergency.focus(); sf.emergency.scrollIntoView({block:'center'}); return; }
+      if(!receipt || !receipt.files || !receipt.files.length){ e.preventDefault(); if(receipt){ receipt.focus(); receipt.style.borderColor='#e0894f'; receipt.scrollIntoView({block:'center'}); } return; }
+      if(!sf.emergency.checked){ e.preventDefault(); sf.emergency.focus(); sf.emergency.scrollIntoView({block:'center'}); return; }
+      // valid → let the native multipart POST go to the hidden iframe so Formsubmit attaches the receipt
+      // file (a real form submission, not fetch). Then open the Cal calendar to pick the time.
       const notes='واتساب: '+wa+' | نوع الجلسة: '+sf.stype.value+' | الشكل: '+sf.format.value+((sf.reason.value||'').trim()?(' | السبب: '+sf.reason.value.trim()):'');
-      // email the booking details + the payment receipt to Life Ark (Formsubmit, multipart so the file attaches)
-      try{
-        const fd=new FormData(sf);
-        fd.append('_subject','طلب حجز جلسة + إيصال دفع — Life Ark');
-        fd.append('_captcha','false');
-        fd.append('_template','table');
-        fetch('https://formsubmit.co/Life.ark.psych@gmail.com',{method:'POST',body:fd,mode:'no-cors'}).catch(function(){});
-      }catch(_){}
-      closeS();
-      openCal({ name:name, email:email, notes:notes });
+      setTimeout(function(){ closeS(); openCal({ name:name, email:email, notes:notes }); }, 150);
     });
   }
 
