@@ -168,18 +168,6 @@
   .world:hover .wgo svg{transform:translateX(-5px)}
   body[data-lang="en"] .world:hover .wgo svg{transform:translateX(5px)}
 
-  /* skills-group CTA band — homepage, under the 4 worlds (a focused CTA, not a 5th path) */
-  .group-band{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:26px;flex-wrap:wrap;margin-top:24px;padding:30px 34px;border-radius:20px;background:linear-gradient(135deg,rgba(217,182,117,.12),rgba(38,62,98,.42));border:1px solid rgba(217,182,117,.34);box-shadow:0 18px 38px -24px rgba(0,0,0,.72),0 3px 10px -6px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.07)}
-  .group-band::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:linear-gradient(var(--gold-bright),var(--gold-deep))}
-  .group-band .gb-main{flex:1 1 340px;min-width:280px}
-  .group-band .kicker{margin-bottom:8px}
-  .group-band h3{font-size:clamp(1.24rem,1.05rem + .7vw,1.55rem);font-weight:700;color:var(--ink);margin-bottom:9px}
-  .group-band p{color:var(--ink-soft);font-weight:300;font-size:1rem;line-height:1.7;margin:0}
-  .group-band p b{font-weight:700;color:var(--gold)}
-  .group-band .gb-price b{color:#fff}
-  .group-band .gb-cta{display:flex;gap:12px;flex-wrap:wrap;align-items:center;flex:0 0 auto}
-  @media(max-width:560px){ .group-band{padding:24px 22px} .group-band .gb-cta{width:100%} .group-band .gb-cta .btn{flex:1 1 auto;justify-content:center} }
-
   /* generic card grids */
   .quick{background:linear-gradient(180deg,var(--t950),var(--t900))}
   .qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
@@ -637,7 +625,8 @@
   @media(max-width:620px){
     .qa-grid,.prog-grid,.partner-grid{grid-template-columns:1fr}
     .foot-grid{grid-template-columns:1fr}
-    .nav-right .btn{display:none}
+    .nav-right{gap:10px}
+    .nav-right .btn{display:inline-flex;padding:8px 15px;font-size:.8rem}
     .hero-stats{gap:24px}
     /* wide ark photo: frame on the ark/people side + heavier scrim for text */
     .hero-photo{background-position:72% center}
