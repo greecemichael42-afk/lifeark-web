@@ -400,6 +400,110 @@ const hdr=document.getElementById('hdr');
   </div>
 </div>`);
   }
+  // ===== Skills-group application modal — injected once, like the session modal =====
+  // The group is a FIXED weekly cohort (Sunday / Monday), not a Cal.com slot — so joining is an
+  // application, not a time-slot booking. No payment up front (the subscription is collected after
+  // the assessment/acceptance). Applicants not referred by a therapist are handed off to the
+  // individual-session booking to schedule the assessment interview.
+  if(!document.getElementById('groupApplyModal')){
+    document.body.insertAdjacentHTML('beforeend', `<div class="modal" id="groupApplyModal" role="dialog" aria-modal="true" aria-labelledby="groupApplyTitle">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="groupApplyClose" aria-label="إغلاق">&times;</button>
+
+    <div id="groupApplyView">
+      <h3 id="groupApplyTitle"><span class="lead-ar">طلب انضمام لجروب المهارات</span><span class="lead-en">Skills Group Application</span></h3>
+      <p class="msub"><span class="lead-ar">الجروب مجموعة ثابتة بتتقابل أسبوعيًا — جروب الأحد أو جروب الاثنين. دي مش حجز ميعاد، دي طلب انضمام: بنراجعه ونأكّد مجموعتك وموعد البداية على واتساب (ومقابلة تقييم قصيرة لو لسه مش محوّل من معالج).</span><span class="lead-en">The group is a fixed weekly cohort — the Sunday group or the Monday group. This isn't a time-slot booking; it's an application. We review it and confirm your group and start date on WhatsApp (with a short assessment if you weren't referred by a therapist).</span></p>
+
+      <div class="pay-box">
+        <div class="pt"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="lead-ar">اشتراك الجروب: 4000 ج.م / $200 شهريًا — لمدة 12 شهرًا</span><span class="lead-en">Group subscription: EGP 4000 / $200 per month — for 12 months</span></div>
+        <p class="pnote ar-only">الاشتراك بيتحصّل بعد المقابلة وتأكيد انضمامك.</p>
+        <p class="pnote lead-en">The subscription is collected after the interview and your place is confirmed.</p>
+      </div>
+
+      <form class="order-form" id="groupApplyForm" novalidate>
+        <div><label><span class="lead-ar">الاسم بالكامل</span><span class="lead-en">Full name</span></label>
+          <input type="text" name="fullname" required autocomplete="name" placeholder="الاسم بالكامل" data-ph-ar="الاسم بالكامل" data-ph-en="Full name" /></div>
+        <div><label><span class="lead-ar">رقم واتساب</span><span class="lead-en">WhatsApp number</span></label>
+          <input type="tel" name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="+20 1XX XXX XXXX" /></div>
+        <div><label><span class="lead-ar">البريد الإلكتروني</span><span class="lead-en">Email</span></label>
+          <input type="email" name="email" required autocomplete="email" placeholder="example@email.com" /></div>
+        <div><label><span class="lead-ar">السن</span><span class="lead-en">Age</span></label>
+          <input type="number" name="age" required min="12" max="99" inputmode="numeric" placeholder="السن" data-ph-ar="السن" data-ph-en="Age" /></div>
+        <div><label><span class="lead-ar">النوع</span><span class="lead-en">Gender</span></label>
+          <select name="gender" required>
+            <option value="" disabled selected data-ar="اختر" data-en="Select">اختر</option>
+            <option value="ذكر / Male" data-ar="ذكر" data-en="Male">ذكر</option>
+            <option value="أنثى / Female" data-ar="أنثى" data-en="Female">أنثى</option>
+            <option value="أخرى / Other" data-ar="أخرى" data-en="Other">أخرى</option>
+          </select></div>
+        <div><label><span class="lead-ar">العنوان</span><span class="lead-en">Address</span></label>
+          <input type="text" name="address" required placeholder="المدينة / المنطقة" data-ph-ar="المدينة / المنطقة" data-ph-en="City / area" /></div>
+        <div><label><span class="lead-ar">عرفتنا منين؟</span><span class="lead-en">Where did you hear about us?</span></label>
+          <select name="heard" required>
+            <option value="" disabled selected data-ar="اختر" data-en="Select">اختر</option>
+            <option value="معالجي / My therapist" data-ar="معالجي" data-en="My therapist">معالجي</option>
+            <option value="سوشيال ميديا / Social media" data-ar="سوشيال ميديا" data-en="Social media">سوشيال ميديا</option>
+            <option value="واتساب / WhatsApp" data-ar="واتساب" data-en="WhatsApp">واتساب</option>
+            <option value="صديق / Friend" data-ar="صديق" data-en="Friend">صديق</option>
+            <option value="أخرى / Other" data-ar="أخرى" data-en="Other">أخرى</option>
+          </select></div>
+        <div><label><span class="lead-ar">محوّل للجروب من معالج معيّن؟</span><span class="lead-en">Referred by a specific therapist?</span></label>
+          <select name="referred" required>
+            <option value="" disabled selected data-ar="اختر" data-en="Select">اختر</option>
+            <option value="نعم، محوّل من معالج / Yes, referred by a therapist" data-ar="نعم، محوّل من معالج" data-en="Yes, referred by a therapist">نعم، محوّل من معالج</option>
+            <option value="لا / No, not referred" data-ar="لا، مش محوّل" data-en="No, not referred">لا، مش محوّل</option>
+          </select></div>
+        <div id="gaTherapistWrap" style="display:none"><label><span class="lead-ar">اسم المعالج المحوِّل</span><span class="lead-en">Referring therapist's name</span></label>
+          <input type="text" name="therapist_name" placeholder="اسم المعالج" data-ph-ar="اسم المعالج" data-ph-en="Therapist's name" /></div>
+        <div class="sp-sat" id="gaAssessNote" style="display:none"><span class="lead-ar">🗓️ مفيش مشكلة — بما إنك لسه مش محوّل، هنرتّبلك مقابلة تقييم قصيرة مع أحد مشرفي الجروب الأول، وبعدها نأكّد انضمامك.</span><span class="lead-en">🗓️ No problem — since you weren't referred, we'll arrange a short assessment with one of the group supervisors first, then confirm your place.</span></div>
+        <div><label><span class="lead-ar">اليوم المفضّل للجروب</span><span class="lead-en">Preferred group day</span></label>
+          <select name="preferred_day" required>
+            <option value="" disabled selected data-ar="اختر" data-en="Select">اختر</option>
+            <option value="جروب الأحد / Sunday group" data-ar="جروب الأحد" data-en="Sunday group">جروب الأحد</option>
+            <option value="جروب الاثنين / Monday group" data-ar="جروب الاثنين" data-en="Monday group">جروب الاثنين</option>
+            <option value="مرن — أي مجموعة / Flexible — either group" data-ar="مرن — أي مجموعة" data-en="Flexible — either group">مرن — أي مجموعة</option>
+          </select>
+          <p class="req-hint ar-only" style="margin-top:6px">اختيارك مبدئي — بيتأكّد نهائيًا بعد المقابلة مع المعالج.</p>
+          <p class="req-hint lead-en" style="margin-top:6px">Your choice is preliminary — it's confirmed after the interview with the therapist.</p></div>
+        <div><label><span class="lead-ar">سبب الانضمام (اختياري)</span><span class="lead-en">Reason for joining (optional)</span></label>
+          <textarea name="reason" placeholder="سطر أو سطرين يكفّوا" data-ph-ar="سطر أو سطرين يكفّوا" data-ph-en="A line or two is enough"></textarea></div>
+
+        <label class="check"><input type="checkbox" name="emergency" required /><span class="ar-only">أُقِرّ بأن مجموعة المهارات ليست بديلًا عن خدمات الطوارئ، وأنه في حالات الخطر العاجل أو الأفكار الانتحارية النشطة سأتواصل فورًا مع الطوارئ أو أقرب مستشفى.</span><span class="lead-en">I acknowledge that the skills group is not a substitute for emergency services, and in cases of immediate danger or active suicidal thoughts I will contact emergency services or the nearest hospital immediately.</span></label>
+
+        <div class="protect-note"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="ar-only">كل بياناتك سرّية، ولا تُكشف إلا في الحالات التي ينص عليها القانون والأخلاقيات المهنية.</span><span class="lead-en">All your information is confidential, disclosed only in cases required by law and professional ethics.</span></div>
+
+        <button class="btn btn-gold" type="submit"><span class="lead-ar">أرسل طلب الانضمام</span><span class="lead-en">Submit application</span></button>
+        <p class="req-hint ar-only">مفيش دفع دلوقتي — الاشتراك بيتحصّل بعد المقابلة وتأكيد انضمامك.</p>
+        <p class="req-hint lead-en">No payment now — the subscription is collected after the interview and your place is confirmed.</p>
+      </form>
+    </div>
+
+    <div class="order-done" id="groupApplyDone">
+      <div class="ok"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h3><span class="lead-ar">وصلنا طلب انضمامك</span><span class="lead-en">Your application is in</span></h3>
+
+      <div id="gaDoneReferred">
+        <p class="ar-only">هنراجع طلبك ونتواصل معاك على واتساب لتأكيد مجموعتك (الأحد أو الاثنين) وموعد أول جلسة.</p>
+        <p class="lead-en">We'll review your application and reach out on WhatsApp to confirm your group (Sunday or Monday) and your first session date.</p>
+      </div>
+
+      <div id="gaDoneAssessment" style="display:none">
+        <p class="ar-only">الخطوة الجاية: مقابلة تقييم قصيرة مع أحد مشرفي الجروب — بنفهم احتياجك ونتأكّد إن الجروب مناسب ليك، وبعدها نثبّت مجموعتك وموعد البداية.</p>
+        <p class="lead-en">Next step: a short assessment with one of the group supervisors — we understand your needs and make sure the group fits you, then confirm your group and start date.</p>
+        <div class="sp-sat" style="margin-top:16px;text-align:center"><span class="lead-ar">📅 تحب نحجز مقابلة التقييم دلوقتي؟</span><span class="lead-en">📅 Want to book the assessment now?</span></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px">
+          <button type="button" class="btn btn-gold" id="gaBookAssessment"><span class="lead-ar">احجز مقابلة التقييم</span><span class="lead-en">Book the assessment</span></button>
+        </div>
+      </div>
+
+      <p class="ar-only" style="color:var(--ink-mute);font-size:.85rem;margin-top:16px">أو تواصل معانا على واتساب +20 112 423 9057.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px">
+        <a class="btn btn-wa" href="https://wa.me/201124239057" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.6-6c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 01-1.9-1.2 7.3 7.3 0 01-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c0-.1-.5-1.3-.7-1.8s-.4-.4-.5-.4h-.5a1 1 0 00-.7.3A2.8 2.8 0 006 9.3c0 1.6 1.2 3.2 1.4 3.4s2.3 3.6 5.6 4.9c2.1.9 2.6.7 3.1.6a2.5 2.5 0 001.7-1.2 2 2 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="lead-ar">تواصل على واتساب</span><span class="lead-en">Chat on WhatsApp</span></a>
+      </div>
+    </div>
+  </div>
+</div>`);
+  }
   // the booking modal is injected AFTER the initial applyLang() ran — re-apply the current
   // language so its placeholders + <select> option labels swap correctly on first load.
   applyLang(body.dataset.lang||savedLang||'ar');
@@ -471,6 +575,91 @@ const hdr=document.getElementById('hdr');
       sView.style.display='none'; sDone.style.display='block';
       const dcard=sessModal.querySelector('.modal-card'); if(dcard) dcard.scrollTop=0;
     });
+  }
+
+  // ===== Skills-group application modal — wiring (intake → email; no payment up front) =====
+  const groupApplyModal=document.getElementById('groupApplyModal');
+  if(groupApplyModal){
+    const gf=document.getElementById('groupApplyForm');
+    const gView=document.getElementById('groupApplyView');
+    const gDone=document.getElementById('groupApplyDone');
+    const gReferredBox=document.getElementById('gaDoneReferred');
+    const gAssessBox=document.getElementById('gaDoneAssessment');
+    const therapistWrap=document.getElementById('gaTherapistWrap');
+    const assessNote=document.getElementById('gaAssessNote');
+    const isReferred=()=>(gf.referred.value||'').indexOf('نعم')===0;
+    // show the therapist-name field only when referred; show the assessment heads-up only when NOT
+    const syncReferral=()=>{ const yes=isReferred(), chosen=!!gf.referred.value;
+      therapistWrap.style.display=yes?'block':'none';
+      assessNote.style.display=(chosen && !yes)?'block':'none'; };
+    const openGroupApply=()=>{
+      Array.from(gf.elements).forEach(el=>{ el.style.borderColor=''; });
+      syncReferral();
+      gView.style.display='block'; gDone.style.display='none';
+      groupApplyModal.classList.add('open'); document.body.style.overflow='hidden';
+      const c=groupApplyModal.querySelector('.modal-card'); if(c) c.scrollTop=0;
+    };
+    const closeGroupApply=()=>{ groupApplyModal.classList.remove('open'); document.body.style.overflow=''; };
+    window.lifeArkGroupApply=openGroupApply;
+    gf.referred.addEventListener('change',syncReferral);
+    Array.from(gf.elements).forEach(el=>{ el.addEventListener('input',()=>{ el.style.borderColor=''; }); el.addEventListener('change',()=>{ el.style.borderColor=''; }); });
+    document.querySelectorAll('[data-group-apply]').forEach(b=>{ b.addEventListener('click',e=>{ e.preventDefault(); openGroupApply(); }); });
+    document.getElementById('groupApplyClose').addEventListener('click',closeGroupApply);
+    groupApplyModal.addEventListener('click',e=>{ if(e.target===groupApplyModal) closeGroupApply(); });
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape' && groupApplyModal.classList.contains('open')) closeGroupApply(); });
+
+    // not-referred applicant → hand off to the individual-session booking (the assessment is a 1:1)
+    const gaBook=document.getElementById('gaBookAssessment');
+    if(gaBook) gaBook.addEventListener('click',function(){ closeGroupApply(); if(typeof window.lifeArkBook==='function') window.lifeArkBook('الجلسة الفردية'); });
+
+    gf.addEventListener('submit',e=>{
+      e.preventDefault();
+      const bad=(el)=>{ el.focus(); el.style.borderColor='#e0894f'; if(el.scrollIntoView) el.scrollIntoView({block:'center'}); };
+      const name=(gf.fullname.value||'').trim();
+      const wa=(gf.whatsapp.value||'').trim();
+      const email=(gf.email.value||'').trim();
+      const age=(gf.age.value||'').trim();
+      const address=(gf.address.value||'').trim();
+      if(!name){ bad(gf.fullname); return; }
+      if(!wa){ bad(gf.whatsapp); return; }
+      if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ bad(gf.email); return; }
+      if(!age){ bad(gf.age); return; }
+      if(!gf.gender.value){ bad(gf.gender); return; }
+      if(!address){ bad(gf.address); return; }
+      if(!gf.heard.value){ bad(gf.heard); return; }
+      if(!gf.referred.value){ bad(gf.referred); return; }
+      if(isReferred() && !(gf.therapist_name.value||'').trim()){ bad(gf.therapist_name); return; }
+      if(!gf.preferred_day.value){ bad(gf.preferred_day); return; }
+      if(!gf.emergency.checked){ gf.emergency.focus(); gf.emergency.scrollIntoView({block:'center'}); return; }
+      // email the application to Life Ark (Formsubmit AJAX — no file attachment, so JSON is fine)
+      try{
+        fetch('https://formsubmit.co/ajax/Life.ark.psych@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({
+          name:name, whatsapp:wa, email:email, age:age, gender:gf.gender.value, address:address,
+          heard_about:gf.heard.value, referred:gf.referred.value,
+          therapist_name:isReferred()?((gf.therapist_name.value||'').trim()||'-'):'—',
+          preferred_day:gf.preferred_day.value, reason:(gf.reason.value||'').trim()||'-',
+          _replyto:email, _subject:'طلب انضمام لجروب المهارات — Life Ark', _template:'table', _captcha:'false'
+        })}).catch(function(){});
+      }catch(_){}
+      // confirmation screen — branch on referral status (referred → we contact you; not → book assessment)
+      const referred=isReferred();
+      if(gReferredBox) gReferredBox.style.display=referred?'block':'none';
+      if(gAssessBox) gAssessBox.style.display=referred?'none':'block';
+      gView.style.display='none'; gDone.style.display='block';
+      const c=groupApplyModal.querySelector('.modal-card'); if(c) c.scrollTop=0;
+    });
+
+    // if someone reaches the group via the SESSION modal's dropdown, route them here instead
+    const sessForm=document.getElementById('sessionForm');
+    if(sessForm && sessForm.stype){
+      sessForm.stype.addEventListener('change',function(){
+        if((sessForm.stype.value||'').indexOf('مجموعة مهارات')===0){
+          const sm=document.getElementById('sessionModal'); if(sm) sm.classList.remove('open');
+          sessForm.stype.selectedIndex=0;
+          openGroupApply();
+        }
+      });
+    }
   }
 
   // ===== About Michael modal =====
