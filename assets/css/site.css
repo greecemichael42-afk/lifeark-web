@@ -324,7 +324,7 @@
   .finale .hero-cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:1}
   /* ===== cinematic tagline band (image-backed, dramatic) ===== */
   .cine-band{position:relative;overflow:hidden;min-height:min(90vh,860px);display:flex;align-items:flex-start;justify-content:center;text-align:center;padding:clamp(56px,11vh,110px) 24px 0;background-color:var(--navy-950);background-size:cover;background-position:center 42%;background-repeat:no-repeat}
-  .cine-band::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(7,14,26,.82),rgba(7,14,26,.3) 24%,rgba(7,14,26,0) 44%,rgba(7,14,26,.12) 66%,rgba(7,14,26,.86))}
+  .cine-band::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(72% 56% at 50% 48%,rgba(7,14,26,.6),transparent 80%),linear-gradient(180deg,rgba(7,14,26,.8),rgba(7,14,26,.34) 30%,rgba(7,14,26,.34) 64%,rgba(7,14,26,.88))}
   .cine-band .wrap{position:relative;z-index:4}
   .cb-sweep{position:absolute;inset:0;z-index:2;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.05) 50%,transparent 58%);transform:translateX(-120%);mix-blend-mode:screen;animation:cbSweep 9s ease-in-out infinite;pointer-events:none}
   @keyframes cbSweep{0%{transform:translateX(-120%)}55%,100%{transform:translateX(120%)}}
@@ -333,6 +333,10 @@
   @keyframes cbWave{0%{transform:translate(0,0) rotate(-.5deg)}25%{transform:translate(5px,-6px) rotate(.3deg)}50%{transform:translate(0,-9px) rotate(.6deg)}75%{transform:translate(-5px,-5px) rotate(-.2deg)}100%{transform:translate(0,0) rotate(-.5deg)}}
   .cb-sub{font-family:var(--en);font-style:italic;font-size:1.16rem;color:var(--ink);margin-top:12px;text-shadow:0 2px 18px rgba(0,0,0,.92)}
   .cb-sub.ar-only{font-family:var(--ar);font-style:normal}
+  .cb-poem{font-family:var(--ar);font-weight:400;font-size:clamp(1.05rem,2.7vw,1.5rem);line-height:2.05;color:var(--ink);margin:0;text-shadow:0 2px 16px rgba(0,0,0,.92)}
+  .cb-poem span{display:block}
+  .cb-poem-mid{font-family:var(--ar);font-weight:300;font-size:clamp(1rem,2.4vw,1.32rem);line-height:1.9;color:var(--ink-soft);max-width:640px;margin:22px auto 0;text-shadow:0 2px 16px rgba(0,0,0,.92)}
+  .cb-poem-close{font-family:var(--ar-display);font-weight:700;font-size:clamp(1.7rem,4.6vw,3rem);line-height:1.5;padding:.12em .1em .26em;margin:26px 0 0;background:linear-gradient(180deg,#fff7e6,var(--gold-bright) 54%,var(--gold-deep));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 3px 18px rgba(0,0,0,.7));animation:cbWave 8s ease-in-out infinite}
   .cb-rule{width:0;height:1px;margin:22px auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
   .cine-band .wrap.in .cb-rule{animation:cbRule 2.4s var(--ease) forwards}
   @keyframes cbRule{to{width:200px}}
@@ -340,7 +344,7 @@
   .cb-mote{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--gold-bright);box-shadow:0 0 9px 2px rgba(240,206,142,.7);animation:cbRise 10s linear infinite}
   @keyframes cbRise{0%{opacity:0;transform:translateY(32px)}15%{opacity:.9}100%{opacity:0;transform:translateY(-160px)}}
   @media(max-width:560px){.cb-mote:nth-child(n+5){display:none}}
-  @media(prefers-reduced-motion:reduce){.cb-sweep,.cb-mote,.cb-title{animation:none}.cine-band .wrap.in .cb-rule{animation:none;width:200px}}
+  @media(prefers-reduced-motion:reduce){.cb-sweep,.cb-mote,.cb-title,.cb-poem-close{animation:none}.cine-band .wrap.in .cb-rule{animation:none;width:200px}}
 
   /* credibility cards */
   .creds{background:linear-gradient(180deg,var(--t900),var(--t950))}
