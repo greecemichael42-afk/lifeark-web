@@ -12,7 +12,7 @@
 })();
 
 const hdr=document.getElementById('hdr');
-  addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>40));
+  if(hdr) addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>40),{passive:true});
   addEventListener('load',()=>document.querySelector('.hero')?.classList.add('in'));
   document.querySelector('.hero')?.classList.add('in');
   // sub-page hero: staggered entrance + an injected animated wave divider (brand water motion)
