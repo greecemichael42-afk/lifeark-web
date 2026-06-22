@@ -907,7 +907,9 @@
      hero only — the approved homepage hero is untouched. */
   .hero-articles .ph-photo,.hero-articles .ph-video{filter:brightness(1.08) contrast(1.05) saturate(1.08)}
   .hero-articles .ph-scrim{background:linear-gradient(180deg,rgba(6,12,22,.46),rgba(6,12,22,.5) 48%,rgba(6,12,22,.66))}
-  .hero-articles h1{background:linear-gradient(180deg,#fff 40%,var(--gold-bright));filter:drop-shadow(0 2px 8px rgba(5,11,20,.98)) drop-shadow(0 6px 26px rgba(5,11,20,.85))!important}
+  .hero-articles h1{white-space:nowrap;background-image:linear-gradient(180deg,#fff 40%,var(--gold-bright));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 8px rgba(5,11,20,.98)) drop-shadow(0 4px 20px rgba(5,11,20,.9)) drop-shadow(0 0 22px rgba(240,206,142,.55)) drop-shadow(0 0 48px rgba(217,182,117,.38))!important}
+  /* keep «مقالات Life Ark» on one line on phones without overflowing — shrink to fit */
+  @media(max-width:480px){.hero-articles h1{font-size:clamp(1.55rem,7.6vw,2.2rem)}}
   .hero-articles .article-dek{color:var(--ink);text-shadow:0 2px 14px rgba(5,11,20,.95),0 1px 3px rgba(5,11,20,.9)}
   .hero-articles .crumb,.hero-articles .crumb a{text-shadow:0 1px 8px rgba(5,11,20,.95)}
   .hero-articles .article-eyebrow{background:rgba(6,12,22,.4);border-color:rgba(217,182,117,.4)}
