@@ -1023,9 +1023,11 @@ const hdr=document.getElementById('hdr');
   (function(){
     var reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-    /* sea story: scroll-scrubbed storm→dawn */
+    /* sea story: scroll-scrubbed storm→dawn — بيشتغل على كل الأجهزة؛ الموبايل بياخد نسخة 480p أخف */
+    var isTouch = matchMedia('(hover:none)').matches || window.innerWidth <= 820;
     var ssWrap = document.getElementById('seastory'), ssVid = document.getElementById('ssVid');
-    if (ssWrap && ssVid && !reduced && window.innerWidth > 820 && matchMedia('(hover:hover)').matches){
+    if (ssWrap && ssVid && !reduced){
+      if (isTouch) ssVid.src = 'assets/img/motionlab-scrub-480.mp4';
       var ssBar = document.getElementById('ssBar'), ssPhs = ssWrap.querySelectorAll('.ss-ph');
       var ssCur = 0, ssReady = false, ssRunning = false, ssLoaded = false;
       ssVid.addEventListener('loadedmetadata', function(){ ssReady = true; });
@@ -1056,16 +1058,24 @@ const hdr=document.getElementById('hdr');
       if (ssFirst) ssFirst.classList.add('on');
     }
 
-    /* living worlds cards: hover cinemagraphs */
-    if (matchMedia('(hover:hover)').matches && !reduced){
+    /* living worlds cards: hover على الماوس — وعلى اللمس بتلعب تلقائيًا وهي داخل الشاشة */
+    if (!reduced){
       document.querySelectorAll('.world--live[data-cardvid]').forEach(function(card){
         var media = card.querySelector('.wmedia');
         if (!media) return;
         var v = document.createElement('video');
         v.src = card.dataset.cardvid; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
         media.appendChild(v);
-        card.addEventListener('mouseenter', function(){ v.play().catch(function(){}); v.style.opacity = '1'; });
-        card.addEventListener('mouseleave', function(){ v.pause(); v.style.opacity = '0'; });
+        if (isTouch){
+          var cardObs = new IntersectionObserver(function(es){
+            if (es[0].intersectionRatio >= 0.55){ v.play().catch(function(){}); v.style.opacity = '1'; }
+            else { v.pause(); v.style.opacity = '0'; }
+          }, { threshold: [0, 0.55] });
+          cardObs.observe(card);
+        } else {
+          card.addEventListener('mouseenter', function(){ v.play().catch(function(){}); v.style.opacity = '1'; });
+          card.addEventListener('mouseleave', function(){ v.pause(); v.style.opacity = '0'; });
+        }
       });
     }
 
