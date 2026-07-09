@@ -1018,3 +1018,64 @@ const hdr=document.getElementById('hdr');
       else if(!e.shiftKey && a===last){ e.preventDefault(); first.focus(); }
     });
   })();
+
+  /* ═══════════ Motion port (design-enhancements): نقل الموشن من المعمل ═══════════ */
+  (function(){
+    var reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+    /* sea story: scroll-scrubbed storm→dawn */
+    var ssWrap = document.getElementById('seastory'), ssVid = document.getElementById('ssVid');
+    if (ssWrap && ssVid && !reduced && window.innerWidth > 820){
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      var ssBar = document.getElementById('ssBar'), ssPhs = ssWrap.querySelectorAll('.ss-ph');
+      var ssCur = 0, ssReady = false;
+      ssVid.addEventListener('loadedmetadata', function(){ ssReady = true; });
+      ssVid.load();
+      (function ssTick(){
+        var r = ssWrap.getBoundingClientRect();
+        var total = r.height - window.innerHeight;
+        var t = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+        ssCur += (t - ssCur) * 0.18;
+        if (ssReady && ssVid.duration && !ssVid.seeking){
+          var target = ssCur * (ssVid.duration - 0.05);
+          if (Math.abs(ssVid.currentTime - target) > 0.033) ssVid.currentTime = target;
+        }
+        if (ssBar) ssBar.style.width = (t * 100) + '%';
+        var ph = t < 0.36 ? 0 : t < 0.72 ? 1 : 2;
+        ssPhs.forEach(function(p, i){ p.classList.toggle('on', i === ph); });
+        requestAnimationFrame(ssTick);
+      })();
+    } else if (ssWrap){
+      var ssFirst = ssWrap.querySelector('.ss-ph');
+      if (ssFirst) ssFirst.classList.add('on');
+    }
+
+    /* living worlds cards: hover cinemagraphs */
+    if (matchMedia('(hover:hover)').matches && !reduced){
+      document.querySelectorAll('.world--live[data-cardvid]').forEach(function(card){
+        var media = card.querySelector('.wmedia');
+        if (!media) return;
+        var v = document.createElement('video');
+        v.src = card.dataset.cardvid; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
+        media.appendChild(v);
+        card.addEventListener('mouseenter', function(){ v.play().catch(function(){}); v.style.opacity = '1'; });
+        card.addEventListener('mouseleave', function(){ v.pause(); v.style.opacity = '0'; });
+      });
+    }
+
+    /* sea ambience toggle on article pages */
+    if (/article-/.test(location.pathname)){
+      var sb = document.createElement('button');
+      sb.className = 'seabtn'; sb.type = 'button'; sb.setAttribute('aria-pressed','false'); sb.title = 'صوت البحر';
+      sb.innerHTML = '<span class="wv"><i></i><i></i><i></i><i></i></span><span class="sblbl">صوت البحر</span>';
+      var sAud = document.createElement('audio');
+      sAud.src = 'assets/img/motionlab-sea.mp3'; sAud.loop = true; sAud.preload = 'none';
+      document.body.appendChild(sb); document.body.appendChild(sAud);
+      sb.addEventListener('click', function(){
+        var lbl = sb.querySelector('.sblbl');
+        if (sAud.paused){ sAud.volume = 0.55; sAud.play().catch(function(){}); sb.classList.add('on'); sb.setAttribute('aria-pressed','true'); lbl.textContent = 'البحر شغّال'; }
+        else { sAud.pause(); sb.classList.remove('on'); sb.setAttribute('aria-pressed','false'); lbl.textContent = 'صوت البحر'; }
+      });
+      document.addEventListener('visibilitychange', function(){ if (document.hidden && !sAud.paused) sb.click(); });
+    }
+  })();

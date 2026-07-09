@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Tajawal:wght@300;400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/css/site.css?v=20260707" />
+<link rel="stylesheet" href="assets/css/site.css?v=20260709" />
 <link rel="canonical" href="https://lifearkdbt.com/" />
 <!-- SEO: structured data. TODO once hosted: add "url" + "logo" (absolute domain URLs). -->
 <script type="application/ld+json">
@@ -116,6 +116,21 @@
   <div class="wave-divider bottom" aria-hidden="true"><div class="wband w1"></div><div class="wband w2"></div></div>
 </section>
 
+<!-- SEA STORY — رحلة من العاصفة للفجر (scroll-scrubbed) -->
+<section class="seastory" id="seastory">
+  <div class="ss-stage">
+    <video id="ssVid" src="assets/img/motionlab-scrub.mp4" muted playsinline preload="auto" poster="assets/img/motionlab-hero-ark.jpg"></video>
+    <img class="ss-fallback" src="assets/img/motionlab-hero-ark.jpg" alt="مركب النجاة في العاصفة" loading="lazy">
+    <div class="ss-tint"></div>
+    <div class="ss-copy">
+      <div class="ss-ph" data-ph="0"><h3><span class="lead-ar">في قلب العاصفة</span><span class="lead-en">In the heart of the storm</span></h3><p><span class="lead-ar">لما كل حاجة بتبقى غامقة ومش مفهومة</span><span class="lead-en">When everything feels dark and senseless</span></p></div>
+      <div class="ss-ph" data-ph="1"><h3><span class="lead-ar">الفانوس لسه شغّال</span><span class="lead-en">The lantern is still burning</span></h3><p><span class="lead-ar">مهارة واحدة صغيرة ممكن تمسّك الدفة</span><span class="lead-en">One small skill can hold the helm</span></p></div>
+      <div class="ss-ph" data-ph="2"><h3><span class="lead-ar">والفجر بييجي</span><span class="lead-en">And dawn comes</span></h3><p><span class="lead-ar">الرحلة ليها بر تاني — ودي مش وعود، دي منهجية</span><span class="lead-en">This journey has another shore — not a promise, a method</span></p></div>
+    </div>
+    <div class="ss-bar"><i id="ssBar"></i></div>
+  </div>
+</section>
+
 <!-- FOUR WORLDS -->
 <section class="worlds" id="worlds">
   <div class="fx fx-dots float-a" style="width:130px;height:90px;top:60px;right:30px"></div>
@@ -127,33 +142,45 @@
       <p class="lead-en">Life Ark isn't only a clinic — it's a space that heals, teaches, reads, and reflects. Choose your door.</p>
     </div>
     <div class="worlds-grid">
-      <a href="therapy.html" class="world reveal d1">
+      <a href="therapy.html" class="world world--live reveal d1" data-cardvid="assets/img/motionlab-card-therapy.mp4">
+        <span class="wmedia"><img src="assets/img/motionlab-pillar-therapy.jpg" alt="" loading="lazy"></span>
+        <div class="wrow">
         <div class="wic"><svg viewBox="0 0 24 24"><path d="M3 14c2 2 5 2 7 0 2 2 5 2 7 0 1 1 2.5 1.5 4 1.5M5 14l2-7h10l2 7M12 7V3"/></svg></div>
         <div class="wbody"><h3><span class="lead-ar">العلاج</span><span class="lead-en">Therapy</span></h3>
           <p class="ar-only">جلسات فردية، مجموعات مهارات DBT، ورش، وبرنامج DBT-SUD للإدمان.</p>
           <p class="lead-en">Individual sessions, DBT skills groups, workshops, and the DBT-SUD addiction program.</p>
           <span class="wgo"><span class="lead-ar">ادخل المسار</span><span class="lead-en">Enter</span><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+        </div>
       </a>
-      <a href="academy.html" class="world reveal d2">
+      <a href="academy.html" class="world world--live reveal d2" data-cardvid="assets/img/motionlab-card-skills.mp4">
+        <span class="wmedia"><img src="assets/img/motionlab-pillar-skills.jpg" alt="" loading="lazy"></span>
+        <div class="wrow">
         <div class="wic"><svg viewBox="0 0 24 24"><path d="M5 5h14v11H5z"/><path d="M10 9l4 2.5-4 2.5zM9 20h6"/></svg></div>
         <div class="wbody"><h3><span class="lead-ar">أكاديمية المهارات</span><span class="lead-en">Skills Academy</span></h3>
           <p class="ar-only">تعلّم مهارات DBT بالفيديو في وقتك — كل وحدة دورة، ومعاينة مجانية قبل أن تشتري.</p>
           <p class="lead-en">Learn DBT skills by video, in your own time — each module a course, with a free preview before you buy.</p>
           <span class="wgo"><span class="lead-ar">ادخل المسار</span><span class="lead-en">Enter</span><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+        </div>
       </a>
-      <a href="books.html" class="world reveal d3">
+      <a href="books.html" class="world world--live reveal d3" data-cardvid="assets/img/motionlab-card-books.mp4">
+        <span class="wmedia"><img src="assets/img/motionlab-pillar-books.jpg" alt="" loading="lazy"></span>
+        <div class="wrow">
         <div class="wic"><svg viewBox="0 0 24 24"><path d="M4 5h7v15H4zM20 5h-7v15h7z"/><path d="M4 5a2 2 0 012-2h5M20 5a2 2 0 00-2-2h-5"/></svg></div>
         <div class="wbody"><h3><span class="lead-ar">الكتب</span><span class="lead-en">Books</span></h3>
           <p class="ar-only">كتب ودلائل عملية بقلم مايكل جابي — تقرأها وتتمرّن عليها في وقتك.</p>
           <p class="lead-en">Practical books and guides by Michael Gaby — to read and practice at your own pace.</p>
           <span class="wgo"><span class="lead-ar">ادخل المسار</span><span class="lead-en">Enter</span><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+        </div>
       </a>
-      <a href="felsala.html" class="world reveal d4">
+      <a href="felsala.html" class="world world--live reveal d4" data-cardvid="assets/img/motionlab-card-sala.mp4">
+        <span class="wmedia"><img src="assets/img/motionlab-pillar-sala.jpg" alt="" loading="lazy"></span>
+        <div class="wrow">
         <div class="wic"><svg viewBox="0 0 24 24"><path d="M3 6h18v11H3z"/><path d="M3 17l4 3h10l4-3M10 10l4 2.5-4 2.5z"/></svg></div>
         <div class="wbody"><h3><span class="lead-ar">في الصالة</span><span class="lead-en">Fel Sala</span></h3>
           <p class="ar-only">برنامج يدمج الفلسفة والأدب والشخصيات بالعلاج النفسي — المنارة التي تنير الطريق.</p>
           <p class="lead-en">A program weaving philosophy, literature, and human figures into psychotherapy — the lighthouse that lights the way.</p>
           <span class="wgo"><span class="lead-ar">ادخل المسار</span><span class="lead-en">Enter</span><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span></div>
+        </div>
       </a>
     </div>
   </div>
@@ -813,7 +840,7 @@
   </div>
 </footer>
 
-<script src="assets/js/site.js?v=20260707" defer></script>
+<script src="assets/js/site.js?v=20260709" defer></script>
 
 <!-- ===== Cal.com booking embed =====
      data-cal-link is Michael's Cal.com username. If the username changes
