@@ -890,7 +890,7 @@
   /* ═══════════ Motion port (design-enhancements): نقل الموشن من المعمل — إضافات فقط ═══════════ */
 
   /* — sea story: رحلة من العاصفة للفجر (scroll-scrubbed) — */
-  .seastory{position:relative;height:300vh}
+  .seastory{position:relative;height:240vh}
   .ss-stage{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--navy-950)}
   .ss-stage video,.ss-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .ss-fallback{display:none}

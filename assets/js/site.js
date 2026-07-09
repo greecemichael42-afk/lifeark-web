@@ -1026,12 +1026,11 @@ const hdr=document.getElementById('hdr');
     /* sea story: scroll-scrubbed storm→dawn */
     var ssWrap = document.getElementById('seastory'), ssVid = document.getElementById('ssVid');
     if (ssWrap && ssVid && !reduced && window.innerWidth > 820){
-      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
       var ssBar = document.getElementById('ssBar'), ssPhs = ssWrap.querySelectorAll('.ss-ph');
-      var ssCur = 0, ssReady = false;
+      var ssCur = 0, ssReady = false, ssRunning = false, ssLoaded = false;
       ssVid.addEventListener('loadedmetadata', function(){ ssReady = true; });
-      ssVid.load();
-      (function ssTick(){
+      function ssTick(){
+        if (!ssRunning) return;                 /* اللوب بيقف تمامًا لما السيكشن بعيد عن الشاشة */
         var r = ssWrap.getBoundingClientRect();
         var total = r.height - window.innerHeight;
         var t = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
@@ -1044,7 +1043,14 @@ const hdr=document.getElementById('hdr');
         var ph = t < 0.36 ? 0 : t < 0.72 ? 1 : 2;
         ssPhs.forEach(function(p, i){ p.classList.toggle('on', i === ph); });
         requestAnimationFrame(ssTick);
-      })();
+      }
+      var ssObs = new IntersectionObserver(function(entries){
+        if (entries[0].isIntersecting){
+          if (!ssLoaded){ ssLoaded = true; ssVid.preload = 'auto'; ssVid.load(); }  /* الفيديو بيتحمّل بس لما المستخدم يقرّب منه */
+          if (!ssRunning){ ssRunning = true; requestAnimationFrame(ssTick); }
+        } else { ssRunning = false; }
+      }, { rootMargin: '150% 0px' });
+      ssObs.observe(ssWrap);
     } else if (ssWrap){
       var ssFirst = ssWrap.querySelector('.ss-ph');
       if (ssFirst) ssFirst.classList.add('on');
