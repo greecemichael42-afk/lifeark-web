@@ -902,7 +902,7 @@
   .ss-ph p{color:var(--gold-bright);font-size:clamp(1rem,2.2vw,1.2rem);text-shadow:0 2px 16px rgba(0,0,0,.8)}
   .ss-bar{position:absolute;bottom:26px;right:50%;transform:translateX(50%);width:min(420px,70vw);height:3px;background:rgba(232,238,246,.18);border-radius:99px;overflow:hidden;z-index:2}
   .ss-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-deep),var(--gold-bright));border-radius:99px}
-  @media(max-width:820px),(prefers-reduced-motion:reduce){
+  @media(max-width:820px),(hover:none),(prefers-reduced-motion:reduce){
     .seastory{height:auto}
     .ss-stage{position:relative;height:72vh}
     .ss-stage video{display:none}

@@ -1025,7 +1025,7 @@ const hdr=document.getElementById('hdr');
 
     /* sea story: scroll-scrubbed storm→dawn */
     var ssWrap = document.getElementById('seastory'), ssVid = document.getElementById('ssVid');
-    if (ssWrap && ssVid && !reduced && window.innerWidth > 820){
+    if (ssWrap && ssVid && !reduced && window.innerWidth > 820 && matchMedia('(hover:hover)').matches){
       var ssBar = document.getElementById('ssBar'), ssPhs = ssWrap.querySelectorAll('.ss-ph');
       var ssCur = 0, ssReady = false, ssRunning = false, ssLoaded = false;
       ssVid.addEventListener('loadedmetadata', function(){ ssReady = true; });
