@@ -1,7 +1,7 @@
-/* Google Analytics 4 (gtag.js) — Life Ark website, property G-X6LMX9VR0Y.
+/* Google Analytics 4 (gtag.js) — Life Ark website, property "Life Ark - lifearkdbt.com" (542278641), stream G-EH6L70RWR9.
    Loaded once here so every page (and any future page that includes site.js) is tracked. */
 (function(){
-  var GA_ID='G-X6LMX9VR0Y';
+  var GA_ID='G-EH6L70RWR9';
   var s=document.createElement('script'); s.async=true; s.src='https://www.googletagmanager.com/gtag/js?id='+GA_ID;
   (document.head||document.documentElement).appendChild(s);
   window.dataLayer=window.dataLayer||[];
