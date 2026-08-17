@@ -91,6 +91,16 @@
 <section class="hero" id="top">
   <div class="hero-photo" style="background-image:url('assets/img/hero-poster.jpg?v=2')" aria-hidden="true"></div>
   <video class="hero-video" autoplay muted loop playsinline preload="none" poster="assets/img/hero-poster.jpg?v=2" data-src="assets/img/hero.mp4?v=2" aria-hidden="true"></video><div class="hero-scrim" aria-hidden="true"></div>
+  <script>
+  /* portrait phones get the native 9:16 hero cut — the 16:9 master upscales ~4x under object-fit:cover there */
+  (function(){
+    if (matchMedia('(orientation:portrait)').matches || Math.min(screen.width, innerWidth) <= 820){
+      var v = document.querySelector('.hero-video'), p = document.querySelector('.hero-photo');
+      if (v){ v.dataset.src = 'assets/img/hero-mobile.mp4?v=1'; v.poster = 'assets/img/hero-poster-mobile.jpg?v=1'; }
+      if (p){ p.style.backgroundImage = "url('assets/img/hero-poster-mobile.jpg?v=1')"; }
+    }
+  })();
+  </script>
   <div class="wrap">
     <div class="hero-inner">
       <div class="eyebrow">Complex Cases · BPD · Emotion Dysregulation · Trauma</div>
