@@ -1060,8 +1060,8 @@ const hdr=document.getElementById('hdr');
 
     /* living worlds cards: hover على الماوس — وعلى اللمس بتلعب تلقائيًا وهي داخل الشاشة */
     if (!reduced){
-      document.querySelectorAll('.world--live[data-cardvid]').forEach(function(card){
-        var media = card.querySelector('.wmedia');
+      document.querySelectorAll('.world--live[data-cardvid], .art-link[data-cardvid]').forEach(function(card){
+        var media = card.querySelector('.wmedia, .acmedia');
         if (!media) return;
         var v = document.createElement('video');
         v.src = card.dataset.cardvid; v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
