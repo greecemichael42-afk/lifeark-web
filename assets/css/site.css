@@ -960,7 +960,12 @@
   .lw-poster img{display:block;width:100%;height:auto;transition:transform 1.4s var(--ease)}
   .lw-poster:hover img{transform:scale(1.04)}
   .lw-poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 72%,rgba(7,14,26,.42));pointer-events:none}
-  .lw-badge{display:inline-flex;align-items:center;gap:9px;font-size:.82rem;color:var(--gold-bright);border:1px solid var(--gold-deep);background:rgba(182,145,63,.12);padding:6px 16px;border-radius:999px;margin-bottom:16px}
+  /* .hero-cta is opacity:0 by default (it animates in only inside .hero/.page-hero) —
+     this section is neither, so its button row must be made visible explicitly. */
+  .lw-body .hero-cta{opacity:1;justify-content:flex-start}
+  @media(max-width:900px){.lw-body .hero-cta{justify-content:center}}
+  .lw-poster{cursor:pointer}
+  .lw-badge{cursor:pointer;display:inline-flex;align-items:center;gap:9px;font-size:.82rem;color:var(--gold-bright);border:1px solid var(--gold-deep);background:rgba(182,145,63,.12);padding:6px 16px;border-radius:999px;margin-bottom:16px}
   .lw-badge i{width:7px;height:7px;border-radius:50%;background:#e0894f;animation:lwPulse 2.2s infinite}
   @keyframes lwPulse{0%{box-shadow:0 0 0 0 rgba(224,137,79,.55)}70%{box-shadow:0 0 0 10px rgba(224,137,79,0)}100%{box-shadow:0 0 0 0 rgba(224,137,79,0)}}
   .lw-body h3{font-size:clamp(1.65rem,3.2vw,2.35rem);line-height:1.32;margin-bottom:10px}

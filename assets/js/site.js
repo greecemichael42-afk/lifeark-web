@@ -866,7 +866,12 @@ const hdr=document.getElementById('hdr');
     window.lifeArkWorkshop=openW;
     wf.location.addEventListener('change',syncFee);
     Array.from(wf.elements).forEach(el=>{ const clr=()=>{ el.style.borderColor=''; }; el.addEventListener('input',clr); el.addEventListener('change',clr); });
-    document.querySelectorAll('[data-workshop]').forEach(b=>{ b.addEventListener('click',e=>{ e.preventDefault(); openW(); }); });
+    // triggers include the poster and the status badge (role="button" divs), so keyboard users
+    // get Enter/Space on them too — a plain click listener would leave those unreachable.
+    document.querySelectorAll('[data-workshop]').forEach(b=>{
+      b.addEventListener('click',e=>{ e.preventDefault(); openW(); });
+      if(b.getAttribute('role')==='button'){ b.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openW(); } }); }
+    });
     document.getElementById('workshopClose').addEventListener('click',closeW);
     wsModal.addEventListener('click',e=>{ if(e.target===wsModal) closeW(); });
     document.addEventListener('keydown',e=>{ if(e.key==='Escape' && wsModal.classList.contains('open')) closeW(); });
