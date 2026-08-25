@@ -21,7 +21,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Tajawal:wght@300;400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="assets/css/site.css?v=20260825" />
+<link rel="stylesheet" href="assets/css/site.css?v=20260825b" />
 <link rel="canonical" href="https://lifearkdbt.com/academy.html" />
 <script type="application/ld+json">
 {
@@ -131,11 +131,11 @@
     </div>
 
     <div class="lw-grid reveal">
-      <div class="lw-poster">
+      <div class="lw-poster" data-workshop role="button" tabindex="0" aria-label="احجز مكانك في ورشة المعنى وإيجاده">
         <img src="assets/img/course-meaning-poster.jpg" alt="المعنى وإيجاده — ورشة مباشرة مع مايكل جابي، الجمعة ٢٨ أغسطس ٢٠٢٦" loading="lazy" width="1024" height="1536" />
       </div>
       <div class="lw-body">
-        <div class="lw-badge"><i></i><span class="lead-ar">التسجيل مفتوح</span><span class="lead-en">Registration open</span></div>
+        <div class="lw-badge" data-workshop role="button" tabindex="0"><i></i><span class="lead-ar">التسجيل مفتوح</span><span class="lead-en">Registration open</span></div>
         <h3><span class="lead-ar">المعنى وإيجاده</span><span class="lead-en">Meaning, and How to Find It</span></h3>
         <p class="lw-lede"><span class="lead-ar">رحلة لفهم الذات وبناء حياة تستحقّ أن تُعاش.</span><span class="lead-en">A journey into understanding yourself and building a life worth living.</span></p>
         <blockquote class="lw-quote"><span class="lead-ar">«الإنسان لا ينكسر لأنّه يتألّم. الإنسان ينكسر لأنّه يتألّم من أجل لا شيء.»</span><span class="lead-en">"A person does not break because they hurt. A person breaks because they hurt for nothing."</span></blockquote>
@@ -309,7 +309,7 @@
 <!-- ===== Cal.com booking embed ===== -->
 <button id="calTrigger" data-cal-namespace="lifeark" data-cal-link="lifeark/50min" data-cal-config='{"layout":"month_view"}' aria-hidden="true" tabindex="-1" style="position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none"></button>
 
-<script src="assets/js/site.js?v=20260825" defer></script>
+<script src="assets/js/site.js?v=20260825b" defer></script>
 <script>
 (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
 Cal("init", "lifeark", {origin:"https://cal.com"});
