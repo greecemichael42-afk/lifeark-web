@@ -952,3 +952,32 @@
     .art-cap-media .acmedia video{display:none}
     .seabtn.on .wv i{animation:none!important}
   }
+
+  /* — ورشة مباشرة (الأكاديمية): بوستر الكورس + تفاصيله + الأعمدة الثلاثة — */
+  .lwork{scroll-margin-top:150px}
+  .lw-grid{display:grid;grid-template-columns:.78fr 1.22fr;gap:44px;align-items:center;max-width:1060px;margin:0 auto}
+  .lw-poster{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 90px -40px rgba(0,0,0,.85)}
+  .lw-poster img{display:block;width:100%;height:auto;transition:transform 1.4s var(--ease)}
+  .lw-poster:hover img{transform:scale(1.04)}
+  .lw-poster::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 72%,rgba(7,14,26,.42));pointer-events:none}
+  .lw-badge{display:inline-flex;align-items:center;gap:9px;font-size:.82rem;color:var(--gold-bright);border:1px solid var(--gold-deep);background:rgba(182,145,63,.12);padding:6px 16px;border-radius:999px;margin-bottom:16px}
+  .lw-badge i{width:7px;height:7px;border-radius:50%;background:#e0894f;animation:lwPulse 2.2s infinite}
+  @keyframes lwPulse{0%{box-shadow:0 0 0 0 rgba(224,137,79,.55)}70%{box-shadow:0 0 0 10px rgba(224,137,79,0)}100%{box-shadow:0 0 0 0 rgba(224,137,79,0)}}
+  .lw-body h3{font-size:clamp(1.65rem,3.2vw,2.35rem);line-height:1.32;margin-bottom:10px}
+  .lw-lede{color:var(--ink-soft);margin-bottom:18px}
+  .lw-quote{border-inline-start:2px solid var(--gold-deep);padding-inline-start:18px;margin:0 0 24px;color:var(--gold-bright);font-size:1.02rem;line-height:1.95}
+  .lw-facts{list-style:none;display:grid;gap:11px;margin:0 0 26px}
+  .lw-facts li{display:flex;align-items:flex-start;gap:11px;color:var(--ink-soft);font-size:.97rem}
+  .lw-facts svg{width:19px;height:19px;flex:none;margin-top:4px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .lw-facts b{color:var(--ink);font-weight:600}
+  .lw-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:58px}
+  .lw-col{border:1px solid var(--line);border-radius:18px;padding:26px 24px;background:rgba(255,255,255,.02)}
+  .lw-col h4{font-size:1.06rem;color:var(--gold-bright);margin-bottom:15px}
+  .lw-col ul{list-style:none;display:grid;gap:12px;counter-reset:lwc}
+  .lw-col li{position:relative;padding-inline-start:19px;color:var(--ink-soft);font-size:.94rem;line-height:1.85}
+  .lw-col li::before{content:"";position:absolute;inset-inline-start:0;top:.72em;width:6px;height:6px;border-radius:50%;background:var(--gold-deep)}
+  .lw-col.num li{counter-increment:lwc;padding-inline-start:32px}
+  .lw-col.num li::before{content:counter(lwc);width:auto;height:auto;top:0;background:none;color:var(--gold);font-family:var(--en);font-size:1.1rem;font-style:italic}
+  .lw-note{max-width:840px;margin:36px auto 0;text-align:center;color:var(--ink-mute);font-size:.94rem;line-height:1.95;border-top:1px solid var(--line);padding-top:26px}
+  @media(max-width:900px){.lw-grid{grid-template-columns:1fr;gap:30px}.lw-poster{max-width:420px;margin:0 auto}.lw-cols{grid-template-columns:1fr;margin-top:42px}}
+  @media(prefers-reduced-motion:reduce){.lw-badge i{animation:none}.lw-poster:hover img{transform:none}}

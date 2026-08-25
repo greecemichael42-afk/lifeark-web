@@ -768,6 +768,150 @@ const hdr=document.getElementById('hdr');
     });
   }
 
+  // ===== Workshop registration modal — «المعنى وإيجاده» =====
+  // Same proven flow as the session booking: the details + the payment receipt reach Life Ark
+  // by email (Formsubmit multipart, so the screenshot attaches), and Formsubmit's _autoresponse
+  // instantly emails the registrant a confirmation carrying every workshop detail.
+  if(!document.getElementById('workshopModal') && document.querySelector('[data-workshop]')){
+    document.body.insertAdjacentHTML('beforeend', `<div class="modal" id="workshopModal" role="dialog" aria-modal="true" aria-labelledby="workshopTitle">
+  <div class="modal-card">
+    <button type="button" class="modal-close" id="workshopClose" aria-label="إغلاق">&times;</button>
+
+    <div id="workshopView">
+      <h3 id="workshopTitle"><span class="lead-ar">حجز ورشة «المعنى وإيجاده»</span><span class="lead-en">Register — "Meaning, and How to Find It"</span></h3>
+      <p class="msub"><span class="lead-ar">الجمعة ٢٨ أغسطس ٢٠٢٦ · تبدأ ٧:٠٠ مساءً بتوقيت القاهرة · ٣ ساعات · أونلاين مباشر على Zoom.</span><span class="lead-en">Friday 28 August 2026 · starts 7:00 PM Cairo time · 3 hours · live online on Zoom.</span></p>
+
+      <div class="pay-box">
+        <div class="pt"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="lead-ar" id="wsFeeAr">الاشتراك: ٥٠٠ جنيه — يُحوَّل قبل الورشة إلى:</span><span class="lead-en" id="wsFeeEn">Fee: 500 EGP — transferred before the workshop, to:</span></div>
+        <div class="prow"><b>InstaPay</b><span>sanfor2412@instapay</span></div>
+        <div class="prow"><b><span class="lead-ar">اتصالات كاش</span><span class="lead-en">Etisalat Cash</span></b><span>01124239057</span></div>
+        <div class="prow"><b><span class="lead-ar">تحويل بنكي</span><span class="lead-en">Bank transfer</span></b><span><span class="lead-ar">تُرسَل عند الطلب</span><span class="lead-en">sent upon request</span></span></div>
+        <p class="pnote ar-only">اِملا بياناتك الأول واحجز، وحوّل قيمة الاشتراك وابعت سكرين التحويل — على واتساب أو ارفعه في الفورم تحت. الحجز بيتأكّد بعد وصول التحويل.</p>
+        <p class="pnote lead-en">Fill in your details and register first, then transfer the fee and send the screenshot — on WhatsApp or uploaded in the form below. Your place is confirmed once the transfer arrives.</p>
+      </div>
+
+      <form class="order-form" id="workshopForm" novalidate>
+        <input type="hidden" name="workshop" value="المعنى وإيجاده — الجمعة ٢٨ أغسطس ٢٠٢٦" />
+        <div><label><span class="lead-ar">الاسم بالكامل</span><span class="lead-en">Full name</span></label>
+          <input type="text" name="fullname" required autocomplete="name" placeholder="الاسم بالكامل" data-ph-ar="الاسم بالكامل" data-ph-en="Full name" /></div>
+        <div><label><span class="lead-ar">رقم واتساب</span><span class="lead-en">WhatsApp number</span></label>
+          <input type="tel" name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="+20 1XX XXX XXXX" /></div>
+        <div><label><span class="lead-ar">البريد الإلكتروني</span><span class="lead-en">Email</span></label>
+          <input type="email" name="email" required autocomplete="email" placeholder="example@email.com" /></div>
+        <div><label><span class="lead-ar">بتحضر من فين؟</span><span class="lead-en">Where are you joining from?</span></label>
+          <select name="location" required>
+            <option value="من داخل مصر / Inside Egypt" data-ar="من داخل مصر — ٥٠٠ جنيه" data-en="Inside Egypt — 500 EGP">من داخل مصر — ٥٠٠ جنيه</option>
+            <option value="من خارج مصر / Outside Egypt" data-ar="من خارج مصر — ٥٠ دولار" data-en="Outside Egypt — $50">من خارج مصر — ٥٠ دولار</option>
+          </select></div>
+        <div><label><span class="lead-ar">عرفت عن الورشة منين؟</span><span class="lead-en">How did you hear about it?</span></label>
+          <select name="heard">
+            <option value="">— اختياري —</option>
+            <option value="إنستجرام">إنستجرام</option>
+            <option value="فيسبوك">فيسبوك</option>
+            <option value="موقع Life Ark">موقع Life Ark</option>
+            <option value="واتساب / جروب">واتساب / جروب</option>
+            <option value="صديق رشّحها">صديق رشّحها</option>
+            <option value="يوتيوب — في الصالة">يوتيوب — في الصالة</option>
+          </select></div>
+        <div><label><span class="lead-ar">سؤال نفسك يتجاوب عليه في الورشة؟</span><span class="lead-en">A question you'd like answered?</span></label>
+          <textarea name="question" placeholder="اختياري — بس بيساعد مايكل يجهّز الأمثلة" data-ph-ar="اختياري — بس بيساعد مايكل يجهّز الأمثلة" data-ph-en="Optional — it helps Michael prepare"></textarea></div>
+        <div class="pay-upload"><label><span class="lead-ar">صورة إيصال الدفع (لو حوّلت بالفعل)</span><span class="lead-en">Payment receipt (if you've already transferred)</span></label>
+          <input type="file" name="payment_receipt" accept="image/*,.pdf" />
+          <p class="req-hint ar-only" style="margin-top:6px">تقدر تسجّل الأول وتحوّل بعدين — لو حوّلت بالفعل ارفع السكرين هنا وتوفّر خطوة. ولو لسه، هنبعتلك التفاصيل في ميل التأكيد وتبعت السكرين على واتساب.</p>
+          <p class="req-hint lead-en" style="margin-top:6px">You can register first and transfer after. If you've already paid, upload the screenshot here; otherwise the confirmation email carries the details and you send it on WhatsApp.</p></div>
+
+        <div class="sp-sat"><span class="lead-ar">📄 أوراق العمل بتوصلك مع لينك الزوم — هتشتغل عليها معانا في الساعة التالتة. والورشة مباشرة ومن غير تسجيل، فحاول تحضر من مكان هادي ومعاك ورقة وقلم.</span><span class="lead-en">📄 The worksheets arrive with your Zoom link — we work on them together in the third hour. The workshop is live with no recording, so join from a quiet place with pen and paper.</span></div>
+
+        <label class="check"><input type="checkbox" name="ack" required /><span class="ar-only">أُقِرّ بأن الورشة تعليميّة وتدريبيّة، وليست بديلًا عن العلاج النفسيّ ولا عن جلسة فرديّة، وأنها مباشرة من غير تسجيل.</span><span class="lead-en">I acknowledge the workshop is educational and training-based — not a substitute for therapy or an individual session — and that it is live with no recording.</span></label>
+
+        <button class="btn btn-gold" type="submit"><span class="lead-ar">أكّد حجزي</span><span class="lead-en">Confirm my place</span></button>
+        <p class="req-hint ar-only">بنراجع الدفع ونبعتلك تأكيد الحجز ولينك الزوم قبل الورشة.</p>
+        <p class="req-hint lead-en">We review the payment and send your confirmation and Zoom link before the workshop.</p>
+      </form>
+    </div>
+
+    <div class="order-done" id="workshopDone">
+      <div class="ok"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
+      <h3><span class="lead-ar">تمّ استلام حجزك</span><span class="lead-en">Your registration is in</span></h3>
+      <p class="ar-only">وصلك ميل بتأكيد الحجز فيه كل تفاصيل الورشة وبيانات التحويل. فاضل خطوة واحدة: حوّل قيمة الاشتراك وابعت سكرين التحويل على واتساب — وبنبعتلك لينك الزوم وأوراق العمل قبل الورشة.</p>
+      <p class="lead-en">A confirmation email with the full workshop details and transfer info is on its way. One step left: transfer the fee and send the screenshot on WhatsApp — then we send your Zoom link and worksheets before the workshop.</p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px">
+        <a class="btn btn-wa" href="https://wa.me/201124239057?text=%D8%A3%D9%87%D9%84%D8%A7%D9%8B%D8%8C%20%D8%B3%D8%AC%D9%91%D9%84%D8%AA%20%D9%81%D9%8A%20%D9%88%D8%B1%D8%B4%D8%A9%20%C2%AB%D8%A7%D9%84%D9%85%D8%B9%D9%86%D9%89%20%D9%88%D8%A5%D9%8A%D8%AC%D8%A7%D8%AF%D9%87%C2%BB" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.6-6c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 01-1.9-1.2 7.3 7.3 0 01-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c0-.1-.5-1.3-.7-1.8s-.4-.4-.5-.4h-.5a1 1 0 00-.7.3A2.8 2.8 0 006 9.3c0 1.6 1.2 3.2 1.4 3.4s2.3 3.6 5.6 4.9c2.1.9 2.6.7 3.1.6a2.5 2.5 0 001.7-1.2 2 2 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg><span class="lead-ar">كلّمنا على واتساب</span><span class="lead-en">Message us on WhatsApp</span></a>
+        <a class="btn btn-ghost" href="books.html"><span class="lead-ar">كتاب «رُكوب الموج»</span><span class="lead-en">The "Riding the Wave" book</span></a>
+      </div>
+
+      <p class="ar-only" style="color:var(--ink-mute);font-size:.85rem;margin-top:14px">لو ما وصلكش الميل خلال دقائق، بُصّ في الـSpam أو كلّمنا على +20 112 423 9057.</p>
+      <p class="lead-en" style="color:var(--ink-mute);font-size:.85rem;margin-top:14px">If the email doesn't arrive within minutes, check your spam folder or message us on +20 112 423 9057.</p>
+    </div>
+  </div>
+</div>`);
+  }
+  const wsModal=document.getElementById('workshopModal');
+  if(wsModal){
+    const wf=document.getElementById('workshopForm');
+    const wView=document.getElementById('workshopView');
+    const wDone=document.getElementById('workshopDone');
+    const feeAr=document.getElementById('wsFeeAr');
+    const feeEn=document.getElementById('wsFeeEn');
+    // the fee line follows the "joining from" answer (Egypt vs abroad)
+    const syncFee=()=>{ const out=(wf.location.value||'').indexOf('خارج')>-1;
+      feeAr.textContent=out?'الاشتراك: ٥٠ دولار — يُحوَّل قبل الورشة إلى:':'الاشتراك: ٥٠٠ جنيه — يُحوَّل قبل الورشة إلى:';
+      feeEn.textContent=out?'Fee: $50 — transferred before the workshop, to:':'Fee: 500 EGP — transferred before the workshop, to:'; };
+    const openW=()=>{ Array.from(wf.elements).forEach(el=>{ el.style.borderColor=''; }); syncFee();
+      wView.style.display='block'; wDone.style.display='none';
+      wsModal.classList.add('open'); document.body.style.overflow='hidden';
+      const c=wsModal.querySelector('.modal-card'); if(c) c.scrollTop=0; };
+    const closeW=()=>{ wsModal.classList.remove('open'); document.body.style.overflow=''; };
+    window.lifeArkWorkshop=openW;
+    wf.location.addEventListener('change',syncFee);
+    Array.from(wf.elements).forEach(el=>{ const clr=()=>{ el.style.borderColor=''; }; el.addEventListener('input',clr); el.addEventListener('change',clr); });
+    document.querySelectorAll('[data-workshop]').forEach(b=>{ b.addEventListener('click',e=>{ e.preventDefault(); openW(); }); });
+    document.getElementById('workshopClose').addEventListener('click',closeW);
+    wsModal.addEventListener('click',e=>{ if(e.target===wsModal) closeW(); });
+    document.addEventListener('keydown',e=>{ if(e.key==='Escape' && wsModal.classList.contains('open')) closeW(); });
+
+    wf.addEventListener('submit',e=>{
+      e.preventDefault();
+      const bad=(el)=>{ el.focus(); el.style.borderColor='#e0894f'; if(el.scrollIntoView) el.scrollIntoView({block:'center'}); };
+      const name=(wf.fullname.value||'').trim();
+      const wa=(wf.whatsapp.value||'').trim();
+      const email=(wf.email.value||'').trim();
+      if(!name){ bad(wf.fullname); return; }
+      if(!wa){ bad(wf.whatsapp); return; }
+      if(!email || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)===false){ bad(wf.email); return; }
+      if(!wf.ack.checked){ wf.ack.focus(); wf.ack.scrollIntoView({block:'center'}); return; }
+      const out=(wf.location.value||'').indexOf('خارج')>-1;
+      // Formsubmit multipart so the receipt attaches; _autoresponse emails the registrant instantly.
+      try{
+        const fd=new FormData(wf);
+        fd.append('_subject','حجز ورشة «المعنى وإيجاده» + إيصال دفع — Life Ark');
+        fd.append('_captcha','false');
+        fd.append('_template','table');
+        fd.append('_replyto',email);
+        fd.append('fee', out?'50 USD':'500 EGP');
+        fd.append('_autoresponse',
+          'تمّ استلام حجزك في ورشة «المعنى وإيجاده» 🌊\n\n'+
+          'الجمعة ٢٨ أغسطس ٢٠٢٦\n'+
+          'تبدأ ٧:٠٠ مساءً بتوقيت القاهرة — ٣ ساعات\n'+
+          'أونلاين مباشر على Zoom\n\n'+
+          'الاشتراك: ٥٠٠ جنيه من داخل مصر · ٥٠ دولار من خارجها.\n'+
+          'التحويل على إنستاباي: sanfor2412@instapay — أو اتصالات كاش: 01124239057\n'+
+          'وابعت سكرين التحويل على واتساب: https://wa.me/201124239057\n\n'+
+          'اللي جاي:\n'+
+          '• أول ما يوصل التحويل بنأكّد مكانك، وبنبعتلك لينك الزوم على الإيميل ده وعلى الواتساب قبل الورشة.\n'+
+          '• أوراق العمل بتوصلك مع اللينك — هتشتغل عليها معانا في الساعة التالتة، فجهّز ورقة وقلم.\n'+
+          '• الورشة مباشرة ومن غير تسجيل، فحاول تحضر من مكان هادي.\n\n'+
+          'ولو حابب تتوسّع في مهارات تنظيم المشاعر، كتاب «رُكوب الموج» بيغطّيها بالتفصيل: https://lifearkdbt.com/books.html\n\n'+
+          'تفاصيل الورشة كاملة: https://lifearkdbt.com/academy.html#live\n\n'+
+          '— فريق Life Ark\nhttps://lifearkdbt.com');
+        fetch('https://formsubmit.co/Life.ark.psych@gmail.com',{method:'POST',body:fd,mode:'no-cors'}).catch(function(){});
+      }catch(_){}
+      wView.style.display='none'; wDone.style.display='block';
+      const c=wsModal.querySelector('.modal-card'); if(c) c.scrollTop=0;
+    });
+  }
+
   // ===== About Michael modal =====
   const aboutModal=document.getElementById('aboutModal');
   const aboutBtn=document.getElementById('aboutBtn');
