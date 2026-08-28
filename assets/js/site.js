@@ -270,12 +270,13 @@ const hdr=document.getElementById('hdr');
     // Michael approves from his email, the book is emailed to the buyer automatically.
     // See book-delivery/Code.gs. Leave '' to fall back to the old WhatsApp flow.
     const BOOK_ORDER_ENDPOINT='https://script.google.com/macros/s/AKfycbw9g6PGoRBuyK1nep1U45EoSBAI0ZUKjI2wXaTdV7Iv-7HWHz-tJNj_yWPSWD4ZBElg/exec';
-    const BOOK_KEYS=[{k:'رُكوب الموج',key:'rokoub'},{k:'العقل الصافي',key:'clear-mind'}];
+    const BOOK_KEYS=[{k:'رُكوب الموج',key:'rokoub'},{k:'العقل الصافي',key:'clear-mind'},{k:'المِيزان',key:'mizan'}];
     const bookKeyFor=(product)=>{ const m=BOOK_KEYS.find(b=>(product||'').indexOf(b.k)>=0); return m?m.key:''; };
     // price shown in the modal pay-box, matched by a substring of the product name
     const ORDER_PRICES=[
       {k:'رُكوب الموج', ar:'حوّل قيمة الكتاب (1000 ج.م / $100) إلى:', en:'Transfer the book price (1000 EGP / $100) to:'},
-      {k:'العقل الصافي', ar:'حوّل قيمة الكتاب (800 ج.م / $50) إلى:', en:'Transfer the book price (800 EGP / $50) to:'}
+      {k:'العقل الصافي', ar:'حوّل قيمة الكتاب (800 ج.م / $50) إلى:', en:'Transfer the book price (800 EGP / $50) to:'},
+      {k:'المِيزان', ar:'حوّل قيمة الكتاب (450 ج.م / $30) إلى:', en:'Transfer the book price (450 EGP / $30) to:'}
     ];
     const orderFeeAr=document.getElementById('orderFeeAr'), orderFeeEn=document.getElementById('orderFeeEn');
     const updateOrderFee=(product)=>{ const m=ORDER_PRICES.find(p=>(product||'').indexOf(p.k)>=0);
