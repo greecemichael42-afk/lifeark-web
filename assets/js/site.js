@@ -432,7 +432,7 @@ const hdr=document.getElementById('hdr');
       <p class="msub"><span class="lead-ar">الجروب مجموعة ثابتة بتتقابل أسبوعيًا — جروب الأحد أو جروب الاثنين. دي مش حجز ميعاد، دي طلب انضمام: بنراجعه ونأكّد مجموعتك وموعد البداية على واتساب (ومقابلة تقييم قصيرة لو لسه مش محوّل من معالج).</span><span class="lead-en">The group is a fixed weekly cohort — the Sunday group or the Monday group. This isn't a time-slot booking; it's an application. We review it and confirm your group and start date on WhatsApp (with a short assessment if you weren't referred by a therapist).</span></p>
 
       <div class="pay-box">
-        <div class="pt"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="lead-ar">اشتراك الجروب: 4000 ج.م / $200 شهريًا — لمدة 12 شهرًا</span><span class="lead-en">Group subscription: EGP 4000 / $200 per month — for 12 months</span></div>
+        <div class="pt"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="lead-ar">اشتراك الجروب: 3000 ج.م / $200 شهريًا — لمدة 12 شهرًا</span><span class="lead-en">Group subscription: EGP 3000 / $200 per month — for 12 months</span></div>
         <p class="pnote ar-only">الاشتراك بيتحصّل بعد المقابلة وتأكيد انضمامك.</p>
         <p class="pnote lead-en">The subscription is collected after the interview and your place is confirmed.</p>
       </div>
@@ -577,7 +577,7 @@ const hdr=document.getElementById('hdr');
     const WA='201124239057';
     const FEES={
       'الجلسة الفردية':['قيمة الجلسة: 1000 ج.م / $50 — تُدفع قبل بدايتها إلى:','Session fee: 1000 EGP / $50 — paid before it starts, to:'],
-      'مجموعة مهارات DBT':['اشتراك المجموعة: 4000 ج.م / $200 شهريًا (لمدة 12 شهرًا) — يُدفع إلى:','Group fee: EGP 4000 / $200 per month (for 12 months) — paid to:'],
+      'مجموعة مهارات DBT':['اشتراك المجموعة: 3000 ج.م / $200 شهريًا (لمدة 12 شهرًا) — يُدفع إلى:','Group fee: EGP 3000 / $200 per month (for 12 months) — paid to:'],
       'الورش المكثّفة':['قيمة الورشة تُحدَّد حسب الورشة — للتفاصيل تواصل معنا، والدفع إلى:','Workshop fee varies by workshop — contact us for details, and pay to:'],
       'برنامج DBT-SUD':['قيمة البرنامج تُحدَّد بعد التقييم — والدفع إلى:','Program fee is set after assessment — and paid to:']
     };
