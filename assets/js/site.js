@@ -344,7 +344,7 @@ const hdr=document.getElementById('hdr');
 
       <div class="pay-box">
         <div class="pt"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="lead-ar" id="sessFeeAr">قيمة الجلسة: 1000 ج.م / $50 — تُدفع قبل بدايتها إلى:</span><span class="lead-en" id="sessFeeEn">Session fee: 1000 EGP / $50 — paid before it starts, to:</span></div>
-        <div class="prow"><b>InstaPay</b><span>sanfor2412@instapay</span></div>
+        <div class="prow"><b>InstaPay</b><span>01207533644</span></div>
         <div class="prow"><b><span class="lead-ar">اتصالات كاش</span><span class="lead-en">Etisalat Cash</span></b><span>01124239057</span></div>
         <div class="prow"><b><span class="lead-ar">تحويل بنكي</span><span class="lead-en">Bank transfer</span></b><span><span class="lead-ar">تُرسَل عند الطلب</span><span class="lead-en">sent upon request</span></span></div>
         <p class="pnote ar-only">حوّل قيمة الجلسة، وارفع صورة الإيصال في الفورم تحت — الحجز ما يكمّلش من غيرها. ونؤكّد الموعد بعد مراجعة الدفع.</p>
@@ -785,7 +785,7 @@ const hdr=document.getElementById('hdr');
 
       <div class="pay-box">
         <div class="pt"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="lead-ar" id="wsFeeAr">الاشتراك: ٥٠٠ جنيه — يُحوَّل قبل الورشة إلى:</span><span class="lead-en" id="wsFeeEn">Fee: 500 EGP — transferred before the workshop, to:</span></div>
-        <div class="prow"><b>InstaPay</b><span>sanfor2412@instapay</span></div>
+        <div class="prow"><b>InstaPay</b><span>01207533644</span></div>
         <div class="prow"><b><span class="lead-ar">اتصالات كاش</span><span class="lead-en">Etisalat Cash</span></b><span>01124239057</span></div>
         <div class="prow"><b><span class="lead-ar">تحويل بنكي</span><span class="lead-en">Bank transfer</span></b><span><span class="lead-ar">تُرسَل عند الطلب</span><span class="lead-en">sent upon request</span></span></div>
         <p class="pnote ar-only">اِملا بياناتك الأول واحجز، وحوّل قيمة الاشتراك وابعت سكرين التحويل — على واتساب أو ارفعه في الفورم تحت. الحجز بيتأكّد بعد وصول التحويل.</p>
@@ -903,7 +903,7 @@ const hdr=document.getElementById('hdr');
           'تبدأ ٧:٠٠ مساءً بتوقيت القاهرة — ٣ ساعات\n'+
           'أونلاين مباشر على Zoom\n\n'+
           'الاشتراك: ٥٠٠ جنيه من داخل مصر · ٥٠ دولار من خارجها.\n'+
-          'التحويل على إنستاباي: sanfor2412@instapay — أو اتصالات كاش: 01124239057\n'+
+          'التحويل على إنستاباي: 01207533644 — أو اتصالات كاش: 01124239057\n'+
           'وابعت سكرين التحويل على واتساب: https://wa.me/201124239057\n\n'+
           'اللي جاي:\n'+
           '• أول ما يوصل التحويل بنأكّد مكانك، وبنبعتلك لينك الزوم على الإيميل ده وعلى الواتساب قبل الورشة.\n'+
