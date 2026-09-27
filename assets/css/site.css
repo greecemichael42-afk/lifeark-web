@@ -967,6 +967,8 @@
   .lw-poster{cursor:pointer}
   .lw-badge{cursor:pointer;display:inline-flex;align-items:center;gap:9px;font-size:.82rem;color:var(--gold-bright);border:1px solid var(--gold-deep);background:rgba(182,145,63,.12);padding:6px 16px;border-radius:999px;margin-bottom:16px}
   .lw-badge i{width:7px;height:7px;border-radius:50%;background:#e0894f;animation:lwPulse 2.2s infinite}
+  .lw-badge--done{cursor:default;color:var(--ink-mute);border-color:var(--line);background:rgba(255,255,255,.03)}
+  .lw-badge--done i{background:var(--ink-mute);animation:none;box-shadow:none}
   @keyframes lwPulse{0%{box-shadow:0 0 0 0 rgba(224,137,79,.55)}70%{box-shadow:0 0 0 10px rgba(224,137,79,0)}100%{box-shadow:0 0 0 0 rgba(224,137,79,0)}}
   .lw-body h3{font-size:clamp(1.65rem,3.2vw,2.35rem);line-height:1.32;margin-bottom:10px}
   .lw-lede{color:var(--ink-soft);margin-bottom:18px}
