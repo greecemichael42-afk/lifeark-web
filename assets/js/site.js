@@ -185,6 +185,9 @@ const hdr=document.getElementById('hdr');
   // (or MailerLite / Mailchimp), then paste its endpoint URL between the quotes below,
   // e.g. "https://formspree.io/f/xxxxxxx". Until then, subscribers reach you via WhatsApp.
   const SUBSCRIBE_ENDPOINT = "https://formsubmit.co/ajax/Life.ark.psych@gmail.com"; // Formsubmit → emails subscriptions to Life Ark
+  // «قايمة المركب»: every lead also goes to the Apps Script (same /exec as book orders) → Google Sheet + welcome email.
+  const LIST_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9g6PGoRBuyK1nep1U45EoSBAI0ZUKjI2wXaTdV7Iv-7HWHz-tJNj_yWPSWD4ZBElg/exec";
+  const toList=(o)=>{ try{ fetch(LIST_ENDPOINT,{method:"POST",body:JSON.stringify(Object.assign({action:"subscribe",source:(location.pathname.split("/").pop()||"index.html")},o)),mode:"no-cors"}).catch(()=>{}); }catch(_){ } };
   const subForm=document.getElementById('subForm');
   if(subForm){
     subForm.addEventListener('submit',async (e)=>{
@@ -194,7 +197,8 @@ const hdr=document.getElementById('hdr');
       if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ subForm.email.focus(); subForm.email.style.borderColor='#e0894f'; return; }
       const done=()=>{ subForm.style.display='none'; const d=document.getElementById('subDone'); if(d) d.style.display='block'; };
       if(SUBSCRIBE_ENDPOINT){
-        fetch(SUBSCRIBE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name:name||'-',email,_replyto:email,_subject:'اشتراك جديد — ابقَ على المركب (Life Ark)',_template:'table',_captcha:'false',_autoresponse:'أهلًا بك على المركب 🌊\n\nشكرًا لاشتراكك في Life Ark. من وقت للتاني هنبعتلك مهارة عملية من مهارات DBT، وأول خبر بأي كتاب جديد أو حلقة جديدة من «في الصالة» — من غير إزعاج، وتقدر تلغي الاشتراك في أي وقت.\n\nلو حابب تحجز جلسة أو عندك أي سؤال، إحنا موجودين على الموقع.\n\n— فريق Life Ark\nhttps://lifearkdbt.com'})}).catch(()=>{});
+        fetch(SUBSCRIBE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name:name||'-',email,_replyto:email,_subject:'اشتراك جديد — ابقَ على المركب (Life Ark)',_template:'table',_captcha:'false'})}).catch(()=>{});
+        toList({name:name,email:email});
         done();
       } else {
         // interim: deliver the lead to Life Ark via WhatsApp
@@ -233,6 +237,7 @@ const hdr=document.getElementById('hdr');
         goal:(ef.goal.value||'').trim()||'-',
         _replyto:email, _subject:'تسجيل اهتمام — تدريب DBT للمتخصصين (Life Ark)', _template:'table', _captcha:'false'
       })}).catch(()=>{});
+      toList({name:name,email:email,welcome:false,source:'professionals'});
       eView.style.display='none'; eDone.style.display='block'; const c=enrollModal.querySelector('.modal-card'); if(c) c.scrollTop=0;
     });
   }
@@ -704,6 +709,7 @@ const hdr=document.getElementById('hdr');
           _replyto:email, _subject:'طلب انضمام لجروب المهارات — Life Ark', _template:'table', _captcha:'false'
         })}).catch(function(){});
       }catch(_){}
+      toList({name:name,email:email,welcome:false,source:'group-apply'});
       // confirmation screen — branch on referral status (referred → we contact you; not → book assessment)
       const referred=isReferred();
       if(gReferredBox) gReferredBox.style.display=referred?'block':'none';
@@ -765,6 +771,7 @@ const hdr=document.getElementById('hdr');
           _replyto:(email||undefined), _subject:'تسجيل اهتمام بالأكاديمية — Life Ark', _template:'table', _captcha:'false'
         })}).catch(function(){});
       }catch(_){}
+      if(email) toList({name:name,email:email,welcome:false,source:'academy'});
       aiView.style.display='none'; aiDone.style.display='block';
       const c=aiModal.querySelector('.modal-card'); if(c) c.scrollTop=0;
     });
