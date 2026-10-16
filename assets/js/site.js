@@ -438,7 +438,7 @@ const hdr=document.getElementById('hdr');
       <p class="msub"><span class="lead-ar">الجروب مجموعة ثابتة بتتقابل أسبوعيًا — جروب الأحد أو جروب الاثنين. دي مش حجز ميعاد، دي طلب انضمام: بنراجعه ونأكّد مجموعتك وموعد البداية على واتساب (ومقابلة تقييم قصيرة لو لسه مش محوّل من معالج).</span><span class="lead-en">The group is a fixed weekly cohort — the Sunday group or the Monday group. This isn't a time-slot booking; it's an application. We review it and confirm your group and start date on WhatsApp (with a short assessment if you weren't referred by a therapist).</span></p>
 
       <div class="pay-box">
-        <div class="pt"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="lead-ar">اشتراك الجروب: 3000 ج.م / $200 شهريًا — لمدة 12 شهرًا</span><span class="lead-en">Group subscription: EGP 3000 / $200 per month — for 12 months</span></div>
+        <div class="pt"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><span class="lead-ar">اشتراك الجروب: 3000 ج.م / $200 شهريًا — لمدة 10 أشهر</span><span class="lead-en">Group subscription: EGP 3000 / $200 per month — for 10 months</span></div>
         <p class="pnote ar-only">الاشتراك بيتحصّل بعد المقابلة وتأكيد انضمامك.</p>
         <p class="pnote lead-en">The subscription is collected after the interview and your place is confirmed.</p>
       </div>
@@ -583,7 +583,7 @@ const hdr=document.getElementById('hdr');
     const WA='201124239057';
     const FEES={
       'الجلسة الفردية':['قيمة الجلسة: 1000 ج.م / $50 — تُدفع قبل بدايتها إلى:','Session fee: 1000 EGP / $50 — paid before it starts, to:'],
-      'مجموعة مهارات DBT':['اشتراك المجموعة: 3000 ج.م / $200 شهريًا (لمدة 12 شهرًا) — يُدفع إلى:','Group fee: EGP 3000 / $200 per month (for 12 months) — paid to:'],
+      'مجموعة مهارات DBT':['اشتراك المجموعة: 3000 ج.م / $200 شهريًا (لمدة 10 أشهر) — يُدفع إلى:','Group fee: EGP 3000 / $200 per month (for 10 months) — paid to:'],
       'الورش المكثّفة':['قيمة الورشة تُحدَّد حسب الورشة — للتفاصيل تواصل معنا، والدفع إلى:','Workshop fee varies by workshop — contact us for details, and pay to:'],
       'برنامج DBT-SUD':['قيمة البرنامج تُحدَّد بعد التقييم — والدفع إلى:','Program fee is set after assessment — and paid to:']
     };
@@ -1251,5 +1251,181 @@ const hdr=document.getElementById('hdr');
         else { sAud.pause(); sb.classList.remove('on'); sb.setAttribute('aria-pressed','false'); lbl.textContent = 'صوت البحر'; }
       });
       document.addEventListener('visibilitychange', function(){ if (document.hidden && !sAud.paused) sb.click(); });
+    }
+  })();
+
+  // ===== Group lantern — homepage-only popup (staging sample 2026-10-16) =====
+  // Lights by itself ~7s after the home page opens (or once the visitor scrolls past the hero),
+  // plays its story (the pieces arrive one after another, like the 9:16 ad), dims by itself after 11s
+  // unless the visitor touches it, and leaves a glowing dot that re-opens it.
+  // Three actions inside: (1) free assessment interview → mini-form (name/email/WhatsApp) emailed to
+  // Life Ark via Formsubmit, the secretary calls back; (2) gift chapter from «ركوب الموج» → mini-form
+  // (name/email), Formsubmit's _autoresponse emails the visitor the chapter link instantly; (3) gold CTA
+  // «حجز الجروب وتفاصيله» → the existing skills-group application modal.
+  // Auto-open happens once per 7 days (localStorage); the dot is always there.
+  (function(){
+    var path = location.pathname.replace(/index\.html$/, '');
+    if (!/\/$/.test(path)) return;                                  // home page only
+    if (document.getElementById('glCard')) return;
+    var KEY = 'lifeark-gl-seen', WEEK = 7 * 24 * 3600 * 1000, STAY = 11000, seen = 0;
+    var FS = 'https://formsubmit.co/ajax/Life.ark.psych@gmail.com';
+    var CHAPTER = 'https://drive.google.com/file/d/1dNSAoYz32OV38ELdxePwoN3POuQ1RSB6/view';
+    try { seen = +localStorage.getItem(KEY) || 0; } catch (_) {}
+    var ar = function (a, e) { return '<span class="lead-ar">' + a + '</span><span class="lead-en">' + e + '</span>'; };
+    document.body.insertAdjacentHTML('beforeend',
+      '<aside class="gl-card" id="glCard" role="dialog" aria-label="جروب مهارات DBT أونلاين" aria-hidden="true">' +
+        '<button type="button" class="gl-close" id="glClose" aria-label="إغلاق">&times;</button>' +
+        '<div class="gl-media"><span class="gl-flare"></span>' +
+          '<div class="gl-head gl-seq">' +
+            '<div class="gl-eyebrow">LIFE ARK · DBT Skills Group</div>' +
+            '<h4>' + ar('جروب مهارات DBT أونلاين', 'Online DBT Skills Group') + '</h4>' +
+          '</div>' +
+        '</div>' +
+        '<div class="gl-body">' +
+          // ---- main view
+          '<div class="gl-view on" id="glMain">' +
+            '<p class="gl-when gl-seq">' + ar('كل أحد ٨–١١ مساءً أو كل اثنين ٧–١٠ مساءً · لمدة ١٠ شهور · مع أ. مايكل جابي', 'Sundays 8–11 pm or Mondays 7–10 pm · 10 months · with Michael Gaby') + '</p>' +
+            '<div class="gl-pills">' +
+              '<button type="button" class="gl-pill gl-seq" id="glPillInterview"><i>✓</i><em>' + ar('مقابلة تقييم مجانية مع أ. مايكل جابي', 'A free assessment interview with Michael Gaby') + '</em><b>‹</b></button>' +
+              '<button type="button" class="gl-pill gl-seq" id="glPillChapter"><i>+</i><em>' + ar('فصل من كتاب «ركوب الموج» هدية', 'A gift chapter from the book «Riding the Wave»') + '</em><b>‹</b></button>' +
+            '</div>' +
+            '<div class="gl-actions gl-seq"><button type="button" class="btn btn-gold" id="glCta">' + ar('حجز الجروب وتفاصيله', 'Book the group & details') + '</button></div>' +
+          '</div>' +
+          // ---- interview mini-form
+          '<div class="gl-view" id="glInterview">' +
+            '<div class="gl-h5">' + ar('مقابلة تقييم مجانية', 'Free assessment interview') + '</div>' +
+            '<p class="gl-note">' + ar('سيب بياناتك، والسكرتيرة هتكلمك على واتساب لتحديد ميعاد المقابلة.', 'Leave your details and our secretary will message you on WhatsApp to set the interview time.') + '</p>' +
+            '<form class="gl-form" id="glInterviewForm" novalidate>' +
+              '<input type="text" name="name" required autocomplete="name" placeholder="الاسم" data-ph-ar="الاسم" data-ph-en="Name" />' +
+              '<input type="email" name="email" required autocomplete="email" placeholder="البريد الإلكتروني" data-ph-ar="البريد الإلكتروني" data-ph-en="Email" />' +
+              '<input type="tel" name="whatsapp" required inputmode="tel" autocomplete="tel" placeholder="رقم واتساب" data-ph-ar="رقم واتساب" data-ph-en="WhatsApp number" />' +
+              '<button type="submit" class="btn btn-gold">' + ar('سجّل', 'Register') + '</button>' +
+            '</form>' +
+            '<button type="button" class="gl-back" data-gl-back>' + ar('‹ رجوع', '‹ Back') + '</button>' +
+          '</div>' +
+          // ---- chapter mini-form
+          '<div class="gl-view" id="glChapter">' +
+            '<div class="gl-h5">' + ar('فصل من كتاب «ركوب الموج» هدية', 'A gift chapter from «Riding the Wave»') + '</div>' +
+            '<p class="gl-note">' + ar('اكتب إيميلك والفصل هيوصلك عليه حالًا.', 'Enter your email and the chapter is sent to you right away.') + '</p>' +
+            '<form class="gl-form" id="glChapterForm" novalidate>' +
+              '<input type="text" name="name" required autocomplete="name" placeholder="الاسم" data-ph-ar="الاسم" data-ph-en="Name" />' +
+              '<input type="email" name="email" required autocomplete="email" placeholder="البريد الإلكتروني" data-ph-ar="البريد الإلكتروني" data-ph-en="Email" />' +
+              '<button type="submit" class="btn btn-gold">' + ar('ابعتلي الفصل', 'Send me the chapter') + '</button>' +
+            '</form>' +
+            '<button type="button" class="gl-back" data-gl-back>' + ar('‹ رجوع', '‹ Back') + '</button>' +
+          '</div>' +
+          // ---- done view
+          '<div class="gl-view" id="glDone"><div class="gl-done"><div class="ok">✓</div>' +
+            '<p id="glDoneInterview">' + ar('تم. السكرتيرة هتكلمك على واتساب لتحديد ميعاد المقابلة.', 'Done. Our secretary will message you on WhatsApp to set the interview time.') + '</p>' +
+            '<p id="glDoneChapter">' + ar('الفصل اتبعت على إيميلك. لو متأخر، بص في الـ Spam.', 'The chapter was sent to your email. If it is late, check your spam folder.') + '</p>' +
+            '<a class="btn btn-gold" id="glDoneLink" href="' + CHAPTER + '" target="_blank" rel="noopener">' + ar('افتح الفصل دلوقتي', 'Open the chapter now') + '</a>' +
+            '<button type="button" class="gl-back" data-gl-back>' + ar('‹ رجوع', '‹ Back') + '</button>' +
+          '</div></div>' +
+        '</div>' +
+        '<span class="gl-timer" aria-hidden="true"></span>' +
+      '</aside>' +
+      '<button type="button" class="gl-dot" id="glDot" aria-label="جروب مهارات DBT" aria-controls="glCard" aria-expanded="false">' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c2.2 3 5 5.2 5 9a5 5 0 0 1-10 0c0-2 .9-3.2 2-4.3.1 1.8.9 2.8 2 3.1 0-2.6-.2-5 1-7.8z"/></svg>' +
+      '</button>');
+    var card = document.getElementById('glCard'), dot = document.getElementById('glDot');
+    var closeT = null, fired = false;
+    var ev = function (n) { if (typeof window.gtag === 'function') window.gtag('event', n, { event_category: 'group_popup' }); };
+    var isOpen = function () { return card.classList.contains('open'); };
+    var show = function (id) {
+      card.querySelectorAll('.gl-view').forEach(function (v) { v.classList.toggle('on', v.id === id); });
+      card.scrollTop = 0;
+    };
+    // the visitor touched it -> it stays (no more auto-dim)
+    var hold = function () { if (card.classList.contains('auto')) { card.classList.remove('auto'); clearTimeout(closeT); } };
+    var close = function (why) {
+      if (!isOpen()) return;
+      clearTimeout(closeT);
+      card.classList.remove('open', 'auto'); card.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('gl-open');
+      dot.setAttribute('aria-expanded', 'false');
+      ev(why === 'auto' ? 'group_popup_autoclose' : 'group_popup_close');
+      setTimeout(function () { if (!isOpen()) show('glMain'); }, 800);
+    };
+    var open = function (auto) {
+      if (isOpen()) return;
+      if (document.querySelector('.modal.open')) return;              // never on top of a form
+      show('glMain');
+      card.classList.add('open'); card.classList.toggle('auto', !!auto); card.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('gl-open');
+      dot.classList.add('show'); dot.setAttribute('aria-expanded', 'true');
+      try { localStorage.setItem(KEY, String(Date.now())); } catch (_) {}
+      ev(auto ? 'group_popup_show' : 'group_popup_open');
+      if (auto) { clearTimeout(closeT); closeT = setTimeout(function () { close('auto'); }, STAY); }
+    };
+    card.addEventListener('mouseenter', hold); card.addEventListener('touchstart', hold, { passive: true }); card.addEventListener('focusin', hold);
+    dot.addEventListener('click', function () { if (isOpen()) close('user'); else open(false); });
+    document.getElementById('glClose').addEventListener('click', function () { close('user'); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isOpen()) close('user'); });
+    // (3) gold CTA -> the existing group application
+    document.getElementById('glCta').addEventListener('click', function () {
+      ev('group_popup_cta'); close('user');
+      if (typeof window.lifeArkGroupApply === 'function') window.lifeArkGroupApply();
+    });
+    // (1)(2) pills -> mini-forms; back links -> main
+    document.getElementById('glPillInterview').addEventListener('click', function () { hold(); show('glInterview'); ev('group_popup_interview_open'); var f = document.getElementById('glInterviewForm'); setTimeout(function () { f.name.focus(); }, 300); });
+    document.getElementById('glPillChapter').addEventListener('click', function () { hold(); show('glChapter'); ev('group_popup_chapter_open'); var f = document.getElementById('glChapterForm'); setTimeout(function () { f.name.focus(); }, 300); });
+    card.querySelectorAll('[data-gl-back]').forEach(function (b) { b.addEventListener('click', function () { show('glMain'); }); });
+    var bad = function (el) { el.focus(); el.style.borderColor = '#e0894f'; };
+    var okEmail = function (v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v); };
+    card.querySelectorAll('.gl-form input').forEach(function (el) { el.addEventListener('input', function () { el.style.borderColor = ''; }); });
+    var post = function (payload) {
+      try { fetch(FS, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) }).catch(function () {}); } catch (_) {}
+    };
+    var done = function (kind) {
+      document.getElementById('glDoneInterview').style.display = kind === 'interview' ? 'block' : 'none';
+      document.getElementById('glDoneChapter').style.display = kind === 'chapter' ? 'block' : 'none';
+      document.getElementById('glDoneLink').style.display = kind === 'chapter' ? 'inline-flex' : 'none';
+      show('glDone');
+    };
+    document.getElementById('glInterviewForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var f = e.target, name = (f.name.value || '').trim(), email = (f.email.value || '').trim(), wa = (f.whatsapp.value || '').trim();
+      if (!name) { bad(f.name); return; }
+      if (!okEmail(email)) { bad(f.email); return; }
+      if (wa.replace(/\D/g, '').length < 8) { bad(f.whatsapp); return; }
+      post({
+        'الطلب': 'مقابلة تقييم مجانية — جروب المهارات', 'الاسم': name, 'الإيميل': email, 'واتساب': wa,
+        'المصدر': 'بوب-أب الهوم (فانوس الجروب)', 'الصفحة': location.href,
+        email: email, _replyto: email, _subject: 'طلب مقابلة تقييم مجانية — جروب المهارات (من الموقع)', _template: 'table', _captcha: 'false',
+        _autoresponse:
+          'أهلًا ' + name + '،\n\n' +
+          'وصلنا طلبك لمقابلة التقييم المجانية الخاصة بجروب مهارات DBT أونلاين.\n' +
+          'السكرتيرة هتكلمك على واتساب (' + wa + ') لتحديد ميعاد المقابلة.\n\n' +
+          'مواعيد الجروب: كل أحد ٨–١١ مساءً أو كل اثنين ٧–١٠ مساءً، لمدة ١٠ شهور، مع أ. مايكل جابي.\n\n' +
+          '— فريق Life Ark\nhttps://lifearkdbt.com'
+      });
+      ev('group_popup_interview_submit'); done('interview'); f.reset();
+    });
+    document.getElementById('glChapterForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var f = e.target, name = (f.name.value || '').trim(), email = (f.email.value || '').trim();
+      if (!name) { bad(f.name); return; }
+      if (!okEmail(email)) { bad(f.email); return; }
+      post({
+        'الطلب': 'فصل «ركوب الموج» الهدية', 'الاسم': name, 'الإيميل': email,
+        'المصدر': 'بوب-أب الهوم (فانوس الجروب)', 'الصفحة': location.href,
+        email: email, _replyto: email, _subject: 'طلب فصل «ركوب الموج» الهدية (من الموقع)', _template: 'table', _captcha: 'false',
+        _autoresponse:
+          'أهلًا ' + name + '،\n\n' +
+          'ده الفصل الهدية من كتاب «رُكوب الموج» — فصل حل المشكلة:\n' + CHAPTER + '\n\n' +
+          'ولو حابب تتعلّم المهارات دي عمليًا، جروب مهارات DBT أونلاين بيبدأ بمقابلة تقييم مجانية مع أ. مايكل جابي:\n' +
+          'كل أحد ٨–١١ مساءً أو كل اثنين ٧–١٠ مساءً، لمدة ١٠ شهور.\n' +
+          'سجّل من هنا: https://lifearkdbt.com\n\n' +
+          '— فريق Life Ark\nhttps://lifearkdbt.com'
+      });
+      ev('group_popup_chapter_submit'); done('chapter'); f.reset();
+    });
+    // the dot appears softly after the hero settles
+    setTimeout(function () { dot.classList.add('show'); }, 2500);
+    // first visit this week -> it lights by itself: after 7s, or once the hero has been scrolled past
+    if (Date.now() - seen > WEEK) {
+      var fire = function () { if (fired) return; fired = true; open(true); };
+      setTimeout(fire, 7000);
+      window.addEventListener('scroll', function () { if (!fired && window.scrollY > window.innerHeight * 0.6) fire(); }, { passive: true });
     }
   })();

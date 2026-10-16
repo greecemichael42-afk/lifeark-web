@@ -995,3 +995,85 @@
   .lw-note{max-width:840px;margin:36px auto 0;text-align:center;color:var(--ink-mute);font-size:.94rem;line-height:1.95;border-top:1px solid var(--line);padding-top:26px}
   @media(max-width:900px){.lw-grid{grid-template-columns:1fr;gap:30px}.lw-poster{max-width:420px;margin:0 auto}.lw-cols{grid-template-columns:1fr;margin-top:42px}}
   @media(prefers-reduced-motion:reduce){.lw-badge i{animation:none}.lw-poster:hover img{transform:none}}
+
+  /* ===== Group lantern — homepage popup: lights by itself, plays its story, dims by itself, leaves a glowing dot (staging sample) ===== */
+  .gl-dot{position:fixed;bottom:84px;right:22px;z-index:245;width:46px;height:46px;border-radius:50%;border:1px solid rgba(240,206,142,.55);background:radial-gradient(circle at 50% 40%,#F6DCA6 0,#D9B675 30%,rgba(182,145,63,.6) 60%,rgba(13,27,46,.9) 100%);cursor:pointer;display:grid;place-items:center;opacity:0;visibility:hidden;transform:translateY(12px) scale(.6);transition:opacity .6s var(--ease),visibility .6s,transform .6s var(--ease);animation:glBreathe 3.4s ease-in-out infinite}
+  .gl-dot.show{opacity:1;visibility:visible;transform:none}
+  .gl-dot:hover{animation-play-state:paused;box-shadow:0 0 44px 12px rgba(240,206,142,.6),0 10px 26px -8px rgba(0,0,0,.6)}
+  .gl-dot svg{width:20px;height:20px;fill:none;stroke:var(--navy-950);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+  .gl-dot::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1px solid rgba(240,206,142,.4);animation:glRing 3.4s ease-out infinite;pointer-events:none}
+  @keyframes glBreathe{0%,100%{box-shadow:0 0 16px 2px rgba(217,182,117,.3),0 10px 26px -8px rgba(0,0,0,.6)}50%{box-shadow:0 0 42px 12px rgba(240,206,142,.55),0 10px 26px -8px rgba(0,0,0,.6)}}
+  @keyframes glRing{0%{transform:scale(.75);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+
+  .gl-card{position:fixed;bottom:144px;right:22px;z-index:246;width:min(392px,calc(100vw - 44px));max-height:calc(100vh - 160px);overflow:hidden auto;border-radius:22px;background:linear-gradient(165deg,var(--navy-800),var(--navy-950));border:1px solid rgba(217,182,117,.32);box-shadow:0 50px 100px -30px rgba(0,0,0,.9),0 0 70px -12px rgba(217,182,117,.28);opacity:0;visibility:hidden;transform:translate(10px,22px) scale(.86);transform-origin:100% 100%;transition:opacity .75s var(--ease),visibility .75s,transform .75s var(--ease),filter .75s var(--ease);filter:brightness(.55);font-family:var(--ar);direction:rtl;text-align:right;scrollbar-width:thin}
+  body[data-lang="en"] .gl-card{direction:ltr;text-align:left}
+  .gl-card.open{opacity:1;visibility:visible;transform:none;filter:brightness(1)}
+  .gl-media{position:relative;height:200px;flex:0 0 auto;background:url("../img/group-popup-michael.jpg?v=4") center 40%/cover no-repeat;overflow:hidden}
+  .gl-media::before{content:"";position:absolute;inset:0;background:inherit;transform-origin:60% 30%;animation:glKb 16s ease-in-out infinite alternate}
+  .gl-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,14,26,0) 0,rgba(7,14,26,.15) 50%,rgba(7,14,26,.78) 82%,var(--navy-950) 100%)}
+  @keyframes glKb{0%{transform:scale(1)}100%{transform:scale(1.08)}}
+  .gl-flare{position:absolute;top:-80px;left:-70px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(246,220,166,.7) 0,rgba(217,182,117,.3) 32%,rgba(217,182,117,0) 68%);pointer-events:none;z-index:2;mix-blend-mode:screen;opacity:0;transition:opacity 1.2s var(--ease)}
+  .gl-card.open .gl-flare{opacity:1;animation:glFlare 4s ease-in-out infinite}
+  @keyframes glFlare{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.12);opacity:1}}
+  .gl-card::before{content:"";position:sticky;top:0;display:block;height:2px;z-index:3;margin-bottom:-2px;background:linear-gradient(90deg,transparent,var(--gold-bright),transparent);opacity:.8}
+  .gl-head{position:absolute;right:20px;left:20px;bottom:12px;z-index:2}
+  .gl-eyebrow{font-family:var(--en);font-style:italic;color:var(--gold);letter-spacing:.18em;font-size:.8rem;margin-bottom:2px;opacity:.95}
+  .gl-card h4{font-family:var(--ar-display);font-weight:400;font-size:1.6rem;line-height:1.25;color:var(--gold-bright);margin:0;text-shadow:0 2px 18px rgba(0,0,0,.6),0 0 26px rgba(240,206,142,.35)}
+  body[data-lang="en"] .gl-card h4{font-family:var(--en);font-style:italic;font-weight:600;font-size:1.5rem}
+  .gl-body{position:relative;z-index:2;padding:12px 20px 20px}
+  .gl-view{display:none}
+  .gl-view.on{display:block;animation:glIn .45s var(--ease) both}
+  .gl-when{color:var(--ink-mute);font-size:.84rem;line-height:1.7;margin:0 0 12px}
+  .gl-pills{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+  .gl-pill{display:flex;align-items:center;gap:10px;width:100%;padding:9px 14px;border-radius:40px;border:1px solid rgba(217,182,117,.35);background:linear-gradient(90deg,rgba(217,182,117,.14),rgba(217,182,117,.04));color:var(--ink);font-family:var(--ar);font-size:.9rem;font-weight:600;line-height:1.5;text-align:start;cursor:pointer;transition:border-color .3s,background .3s,transform .3s var(--ease)}
+  .gl-pill:hover{border-color:var(--gold);background:linear-gradient(90deg,rgba(217,182,117,.24),rgba(217,182,117,.08));transform:translateX(-3px)}
+  body[data-lang="en"] .gl-pill:hover{transform:translateX(3px)}
+  .gl-pill i{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));color:var(--navy-950);font-style:normal;font-size:.8rem;font-weight:800}
+  .gl-pill em{flex:1 1 auto;font-style:normal}
+  .gl-pill b{flex:0 0 auto;color:var(--gold);font-weight:400;font-size:1.05rem;line-height:1}
+  .gl-actions{display:flex;align-items:center;gap:14px}
+  .gl-actions .btn{padding:12px 24px;font-size:.92rem;width:100%;justify-content:center}
+  /* mini-forms inside the card */
+  .gl-h5{font-size:1.05rem;color:var(--gold-bright);margin:2px 0 4px;font-weight:700}
+  .gl-note{color:var(--ink-soft);font-size:.86rem;line-height:1.75;margin:0 0 12px}
+  .gl-form{display:flex;flex-direction:column;gap:9px}
+  .gl-form input{width:100%;min-width:0;padding:11px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);font-family:var(--ar);font-size:.93rem;outline:none;transition:border-color .3s}
+  .gl-form input::placeholder{color:var(--ink-mute)}
+  .gl-form input:focus{border-color:var(--gold)}
+  .gl-form .btn{width:100%;justify-content:center;padding:12px 22px;font-size:.92rem;margin-top:3px}
+  .gl-back{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:none;border:0;color:var(--ink-mute);font-family:var(--ar);font-size:.84rem;cursor:pointer;padding:0;transition:color .3s}
+  .gl-back:hover{color:var(--gold)}
+  .gl-done{text-align:center;padding:6px 0 2px}
+  .gl-done .ok{width:46px;height:46px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold-bright),var(--gold-deep));color:var(--navy-950);font-size:1.3rem;font-weight:800;box-shadow:0 0 30px rgba(240,206,142,.45)}
+  .gl-done p{color:var(--ink-soft);font-size:.92rem;line-height:1.8;margin:0 0 12px}
+  .gl-done .btn{width:100%;justify-content:center;padding:11px 20px;font-size:.9rem}
+  /* the story: each piece arrives in turn, like the ad's motion */
+  .gl-seq{opacity:0;transform:translateY(14px)}
+  .gl-card.open .gl-seq{animation:glIn .7s var(--ease) both}
+  .gl-card.open .gl-head{animation-delay:.25s}
+  .gl-card.open .gl-when{animation-delay:.7s}
+  .gl-card.open .gl-pill:nth-child(1){animation-delay:1.05s}
+  .gl-card.open .gl-pill:nth-child(2){animation-delay:1.45s}
+  .gl-card.open .gl-actions{animation-delay:1.95s}
+  @keyframes glIn{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
+  .gl-close{position:absolute;top:12px;left:12px;z-index:4;width:32px;height:32px;border-radius:50%;border:1px solid rgba(240,206,142,.35);background:rgba(7,14,26,.55);backdrop-filter:blur(6px);color:var(--gold-bright);cursor:pointer;font-size:1.15rem;line-height:1;display:grid;place-items:center;transition:all .3s}
+  body[data-lang="en"] .gl-close{left:auto;right:12px}
+  .gl-close:hover{background:rgba(240,206,142,.18)}
+  .gl-timer{position:absolute;left:0;bottom:0;height:2px;width:0;z-index:4;background:linear-gradient(90deg,var(--gold-deep),var(--gold-bright));box-shadow:0 0 10px rgba(240,206,142,.6);opacity:0}
+  .gl-card.auto .gl-timer{opacity:1;animation:glTimer 11s linear forwards}
+  .gl-card:hover .gl-timer{animation-play-state:paused}
+  @keyframes glTimer{0%{width:100%}100%{width:0}}
+
+  @media(max-width:560px){
+    .gl-dot{bottom:80px;right:14px;width:42px;height:42px}
+    .gl-card{right:12px;left:12px;bottom:12px;width:auto;max-height:calc(100vh - 24px);transform-origin:50% 100%;border-radius:20px}
+    .gl-media{height:170px}
+    .gl-card h4{font-size:1.45rem}
+    .gl-card.open + .gl-dot{opacity:0;visibility:hidden}
+    body.gl-open .wa-float,body.gl-open .seabtn,body.gl-open .to-top{opacity:0;visibility:hidden;pointer-events:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .gl-dot,.gl-dot::after,.gl-media::before,.gl-card.open .gl-flare{animation:none}
+    .gl-card{transition-duration:.2s}
+    .gl-seq,.gl-card.open .gl-seq{animation:none;opacity:1;transform:none}
+  }
