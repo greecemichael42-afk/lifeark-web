@@ -1077,3 +1077,26 @@
     .gl-card{transition-duration:.2s}
     .gl-seq,.gl-card.open .gl-seq{animation:none;opacity:1;transform:none}
   }
+
+  /* ===== Article write-box — «المقال ده لمس حاجة جواك؟ قولي.» private message to Michael under every article ===== */
+  .article-write{max-width:760px;margin:22px auto 0;padding:0 28px}
+  .article-write .ac-box{text-align:center;padding:clamp(30px,5vw,46px) clamp(22px,4vw,40px);border:1px solid rgba(217,182,117,.3);border-radius:22px;background:linear-gradient(165deg,rgba(217,182,117,.08),rgba(27,48,80,.32));box-shadow:0 18px 38px -24px rgba(0,0,0,.7)}
+  .article-write .ac-box .kicker{margin-bottom:8px}
+  .article-write .ac-box h3{font-family:var(--ar-display);font-weight:400;font-size:clamp(1.5rem,3.4vw,2rem);color:var(--gold-bright);margin-bottom:10px;line-height:1.4;text-shadow:0 0 26px rgba(240,206,142,.25)}
+  body[data-lang="en"] .article-write .ac-box h3{font-family:var(--en);font-style:italic;font-weight:600}
+  .article-write .ac-box p{color:var(--ink-soft);line-height:1.9;margin-bottom:18px}
+  .wr-form{display:flex;flex-direction:column;gap:10px;max-width:640px;margin:0 auto}
+  .wr-form textarea,.wr-form input{width:100%;min-width:0;padding:14px 20px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);font-family:var(--ar);font-size:.95rem;outline:none;transition:border-color .3s}
+  .wr-form textarea{border-radius:18px;min-height:120px;resize:vertical;line-height:1.8}
+  .wr-form input{border-radius:46px}
+  .wr-form textarea::placeholder,.wr-form input::placeholder{color:var(--ink-mute)}
+  .wr-form textarea:focus,.wr-form input:focus{border-color:var(--gold)}
+  .wr-row{display:flex;gap:10px;flex-wrap:wrap}
+  .wr-row input{flex:1 1 200px}
+  .wr-checks{display:flex;flex-direction:column;align-items:center;gap:8px;margin:2px 0 6px}
+  .wr-consent{display:flex;align-items:center;justify-content:center;gap:10px;font-size:.9rem;color:var(--ink-soft);cursor:pointer;user-select:none;text-align:start}
+  .wr-consent input{width:18px;height:18px;flex:0 0 auto;accent-color:var(--gold);cursor:pointer}
+  .wr-form .btn{align-self:center;min-width:160px;justify-content:center}
+  .wr-done{display:none;color:var(--gold-bright);font-weight:600;font-size:1.1rem;line-height:1.8;padding:14px 8px 4px}
+  .wr-note{font-size:.82rem;color:var(--ink-mute);margin-top:14px}
+  @media(max-width:560px){.article-write{padding:0 16px}}
