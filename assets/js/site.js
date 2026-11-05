@@ -1499,3 +1499,138 @@ const hdr=document.getElementById('hdr');
       if (done.scrollIntoView) done.scrollIntoView({ block: 'center', behavior: 'smooth' });
     });
   })();
+
+  // ===== Article extras (2026-11-05): share bar · «ابعته لي على الإيميل» · «اقرأ أيضًا» =====
+  // Why from site.js: the 17 article pages share one template, so one block here means zero HTML edits per article.
+  // 1) Share: WhatsApp first (the audience's channel), then the device's own share sheet on phones / copy-link on desktop.
+  // 2) Mail-me: GA4 shows readers opening 10–16-minute articles from Facebook and leaving in ~10 s. The box offers the
+  //    article by email — Formsubmit's _autoresponse carries the link — and logs the address in «قايمة المركب» as a lead.
+  //    Long articles only (≥ 8 minutes on the meta line).
+  // 3) Related: two hand-picked neighbours per article, after the «قولنا» box, so the last thing on the page is a next read.
+  (function () {
+    var file = location.pathname.split('/').pop() || '';
+    if (!/^article-/.test(file)) return;
+    var slug = file.replace(/\.html$/, '');
+    var en = document.body.dataset.lang === 'en';
+    var ar = function (a, e) { return '<span class="lead-ar">' + a + '</span><span class="lead-en">' + e + '</span>'; };
+    var ph = function (a, e) { return 'placeholder="' + (en ? e : a) + '" data-ph-ar="' + a + '" data-ph-en="' + e + '"'; };
+    var h1 = document.querySelector('.article-hero h1') || document.querySelector('h1');
+    var tOf = function (lang) { return h1 ? ((h1.querySelector(lang === 'en' ? '.lead-en' : '.lead-ar') || h1).textContent.replace(/\s+/g, ' ').trim()) : document.title; };
+    var url = 'https://lifearkdbt.com/' + file;
+    var ev = function (n, extra) { if (typeof window.gtag === 'function') window.gtag('event', n, Object.assign({ event_category: 'article', event_label: slug }, extra || {})); };
+    var arDigits = function (n) { return String(n).replace(/\d/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'[d]; }); };
+
+    // ---- 1) share bar under the hero meta line
+    var meta = document.querySelector('.article-hero .article-meta');
+    if (meta && !document.getElementById('artShare')) {
+      var canNative = !!navigator.share;
+      meta.insertAdjacentHTML('afterend',
+        '<div class="art-share" id="artShare">' +
+          '<a class="sh-btn sh-wa" id="shWa" target="_blank" rel="noopener" href="https://wa.me/"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.9.9-2.8-.2-.3A8 8 0 1112 20zm4.6-6c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.5.1-.6.8-.8 1-.3.2-.5.1a6.5 6.5 0 01-1.9-1.2 7.3 7.3 0 01-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c0-.1-.5-1.3-.7-1.8s-.4-.4-.5-.4h-.5a1 1 0 00-.7.3A2.8 2.8 0 006 9.3c0 1.6 1.2 3.2 1.4 3.4s2.3 3.6 5.6 4.9c2.1.9 2.6.7 3.1.6a2.5 2.5 0 001.7-1.2 2 2 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg>' + ar('شارك على واتساب', 'Share on WhatsApp') + '</a>' +
+          '<button type="button" class="sh-btn" id="shMore"><svg viewBox="0 0 24 24">' + (canNative ? '<path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M12 15V3m0 0L8 7m4-4l4 4"/>' : '<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>') + '</svg>' + (canNative ? ar('مشاركة', 'Share') : ar('نسخ الرابط', 'Copy link')) + '</button>' +
+          '<span class="sh-done" id="shDone">' + ar('اتنسخ الرابط', 'Link copied') + '</span>' +
+        '</div>');
+      var wa = document.getElementById('shWa');
+      wa.addEventListener('click', function () {
+        wa.href = 'https://wa.me/?text=' + encodeURIComponent(tOf(document.body.dataset.lang) + '\n' + url);
+        ev('article_share', { method: 'whatsapp' });
+      });
+      document.getElementById('shMore').addEventListener('click', function () {
+        var t = tOf(document.body.dataset.lang);
+        if (canNative) { navigator.share({ title: t, text: t, url: url }).then(function () { ev('article_share', { method: 'native' }); }).catch(function () {}); return; }
+        var ok = function () { var d = document.getElementById('shDone'); d.classList.add('on'); setTimeout(function () { d.classList.remove('on'); }, 1800); ev('article_share', { method: 'copy' }); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { window.prompt('', url); });
+        else window.prompt('', url);
+      });
+    }
+
+    // ---- 2) «ابعته لي على الإيميل» — after the lead paragraph, long articles only
+    var mins = 0, mi = document.querySelector('.article-meta .am-i .lead-ar');
+    if (mi) { var digits = mi.textContent.replace(/[٠-٩]/g, function (d) { return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); }); mins = parseInt((digits.match(/\d+/) || [0])[0], 10) || 0; }
+    var prose = document.querySelector('.article-prose');
+    var anchor = prose && (prose.querySelector('.article-lead') || prose.querySelector('p'));
+    if (prose && anchor && mins >= 8 && !document.getElementById('artMail')) {
+      anchor.insertAdjacentHTML('afterend',
+        '<aside class="art-mail" id="artMail">' +
+          '<div class="am-txt"><b>' + ar('مش فاضي دلوقتي؟', 'No time right now?') + '</b> ' + ar('المقال ' + arDigits(mins) + ' دقيقة. سيب بريدك وهيوصلك تقراه براحتك.', 'This is a ' + mins + '-minute read. Leave your email and it will be waiting for you.') + '</div>' +
+          '<form class="am-form" id="artMailForm" novalidate>' +
+            '<input type="email" name="email" autocomplete="email" inputmode="email" ' + ph('بريدك الإلكتروني', 'Your email') + ' aria-label="البريد الإلكتروني" />' +
+            '<button type="submit" class="btn btn-gold btn-sm">' + ar('ابعته لي', 'Send it to me') + '</button>' +
+          '</form>' +
+          '<p class="am-done" id="artMailDone">' + ar('اتبعت. بص في بريدك، ولو ما لقيتوش بص في الرسائل غير المرغوبة.', 'Sent. Check your inbox, and the spam folder if it is not there.') + '</p>' +
+        '</aside>');
+      var mf = document.getElementById('artMailForm'), md = document.getElementById('artMailDone');
+      mf.email.addEventListener('input', function () { mf.email.style.borderColor = ''; });
+      mf.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = (mf.email.value || '').trim();
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { mf.email.focus(); mf.email.style.borderColor = '#e0894f'; return; }
+        var tAr = tOf('ar');
+        var payload = {
+          'الطلب': 'إرسال المقال على البريد', 'الإيميل': email, 'المقال': tAr, 'الرابط': url,
+          email: email, _replyto: email, _subject: 'طلب مقال على البريد — ' + tAr, _template: 'table', _captcha: 'false', _cc: 'greecemichael42@gmail.com',
+          _autoresponse:
+            'أهلًا،\n\n' +
+            'ده المقال اللي طلبته من موقع Life Ark:\n«' + tAr + '»\n' + url + '\n\n' +
+            'اقراه براحتك. ولو لمس حاجة جواك، في آخره صندوق «قولنا» بيوصل لفريق Life Ark مباشرة.\n\n' +
+            '— فريق Life Ark\nhttps://lifearkdbt.com'
+        };
+        try { fetch('https://formsubmit.co/ajax/Life.ark.psych@gmail.com', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) }).catch(function () {}); } catch (_) {}
+        if (typeof window.lifeArkToList === 'function') window.lifeArkToList({ name: '-', email: email, welcome: false, source: 'article-mail:' + slug });
+        ev('article_mail_submit');
+        mf.style.display = 'none'; md.style.display = 'block';
+      });
+    }
+
+    // ---- 3) «اقرأ أيضًا» — two neighbours, after the write-box (the last thing on the page is a next read)
+    var A = {
+      'article-trauma-lens': ['حين تتحوّل الصدمة النفسية إلى تفسير لكل شيء!', 'When Trauma Becomes the Explanation for Everything', 'التشخيص و الصدمات', 'Diagnosis &amp; Trauma'],
+      'article-survivor': ['لا تنزع سلاح الناجي', 'Do Not Disarm the Survivor', 'علاج الصدمات', 'Trauma Therapy'],
+      'article-utopia': ['محدش طلب منك تكون حكيم المدينة', 'Nobody Asked You to Be the Sage of the City', 'العلاج و حدوده', 'Therapy &amp; Its Limits'],
+      'article-amina-trauma': ['دقيقة واحدة و ربع قرن .. أمينة و التروما', 'One Minute and a Quarter Century: Amina and Trauma', 'الصدمات و ذاكرة الجسد', 'Trauma &amp; Body Memory'],
+      'article-abandonment': ['وجود مؤذي مقابل غياب مرعب', 'A Harmful Presence Against a Terrifying Absence', 'العلاقات والخوف من التخلي', 'Relationships &amp; Abandonment'],
+      'article-healing': ['طب و أنا من غير الحتة دي أبقى مين؟', 'And Who Am I Without This Piece of Me?', 'الحزن والفقد', 'Grief &amp; Loss'],
+      'article-dbt': ['إنت كويس زي ما إنت… ولازم تتغيّر', 'You Are Fine As You Are — And You Must Change', 'العلاج الجدلي السلوكي', 'DBT'],
+      'article-pain': ['مش كل وجع مرض… ومش كل وجع دلع', 'Not Every Pain Is an Illness… and Not Every Pain Is Weakness', 'الألم والتشخيص', 'Pain &amp; Diagnosis'],
+      'article-divorce': ['الجنازات الستّ', 'The Six Funerals', 'الطلاق والفقد', 'Divorce &amp; Loss'],
+      'article-covid': ['العالم عاد، ونحن لم نَعُدْ', 'The World Came Back, and We Did Not', 'ما بعد كوفيد', 'After COVID'],
+      'article-values': ['ما الذي يستحقّ كلّ هذا الألم؟', 'What Is Worth All This Pain?', 'قيم ومعنى', 'Values &amp; Meaning'],
+      'article-supernova': ['سوبر نوفا', 'Supernova', 'مقال ثقافي', 'Cultural Essay'],
+      'article-procrustes': ['سرير بروكروستيس', 'The Bed of Procrustes', 'مقال أدبي نفسي', 'Literary Essay'],
+      'article-eden': ['خارج البيت الكبير', 'Outside the Great House', 'مقال أدبي نفسي', 'Literary Essay'],
+      'article-basira': ['بصيرةٌ بلا فعل', 'Insight Without Action', 'مقال أدبي نفسي', 'Literary Essay'],
+      'article-bpd': ['اضطراب الشخصية الحدية: ما وراء الوصمة', 'Borderline Personality Disorder: Beyond the Stigma', 'الشخصية الحدية', 'Borderline Personality'],
+      'article-adhd': ['ADHD: ما وراء الصورة الشائعة', 'ADHD: Beyond the Common Picture', 'فرط الحركة وتشتت الانتباه', 'ADHD']
+    };
+    var R = {
+      'article-trauma-lens': ['article-survivor', 'article-amina-trauma'],
+      'article-survivor': ['article-trauma-lens', 'article-amina-trauma'],
+      'article-utopia': ['article-dbt', 'article-pain'],
+      'article-amina-trauma': ['article-survivor', 'article-trauma-lens'],
+      'article-abandonment': ['article-healing', 'article-bpd'],
+      'article-healing': ['article-abandonment', 'article-divorce'],
+      'article-dbt': ['article-utopia', 'article-pain'],
+      'article-pain': ['article-dbt', 'article-utopia'],
+      'article-divorce': ['article-healing', 'article-values'],
+      'article-covid': ['article-values', 'article-eden'],
+      'article-values': ['article-covid', 'article-divorce'],
+      'article-supernova': ['article-procrustes', 'article-eden'],
+      'article-procrustes': ['article-utopia', 'article-basira'],
+      'article-eden': ['article-basira', 'article-covid'],
+      'article-basira': ['article-eden', 'article-procrustes'],
+      'article-bpd': ['article-abandonment', 'article-dbt'],
+      'article-adhd': ['article-bpd', 'article-pain']
+    };
+    var art = document.querySelector('main article') || document.querySelector('article');
+    var rel = R[slug];
+    if (art && rel && !document.getElementById('artRelated')) {
+      var card = function (s) {
+        var a = A[s]; if (!a) return '';
+        return '<a href="' + s + '.html" class="art-card art-link"><div class="art-cap"><svg viewBox="0 0 24 24"><path d="M4 19V5a1 1 0 011-1h5a2 2 0 012 2v13M20 19V5a1 1 0 00-1-1h-5a2 2 0 00-2 2v13M4 19h16"/></svg><span class="tag">' + ar(a[2], a[3]) + '</span></div>' +
+          '<div class="art-body"><h3>' + ar(a[0], a[1]) + '</h3><div class="art-foot"><span class="art-status">' + ar('اقرأ المقال ←', 'Read →') + '</span></div></div></a>';
+      };
+      art.insertAdjacentHTML('beforeend',
+        '<section class="art-related" id="artRelated"><div class="ar-head">' + ar('اقرأ أيضًا', 'Read also') + '</div><div class="ar-grid">' + card(rel[0]) + card(rel[1]) + '</div></section>');
+      Array.prototype.forEach.call(document.querySelectorAll('#artRelated a'), function (a) { a.addEventListener('click', function () { ev('article_related_click', { to: a.getAttribute('href') }); }); });
+    }
+  })();
