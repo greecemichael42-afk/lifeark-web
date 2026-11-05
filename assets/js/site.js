@@ -185,6 +185,8 @@ const hdr=document.getElementById('hdr');
   // (or MailerLite / Mailchimp), then paste its endpoint URL between the quotes below,
   // e.g. "https://formspree.io/f/xxxxxxx". Until then, subscribers reach you via WhatsApp.
   const SUBSCRIBE_ENDPOINT = "https://formsubmit.co/ajax/Life.ark.psych@gmail.com"; // Formsubmit → emails subscriptions to Life Ark
+  // _cc on every Formsubmit payload (2026-11-05, Michael's OK): a copy of each form reaches greecemichael42@gmail.com too,
+  // because Life.ark.psych is not readable from the sessions that answer leads. Booking + workshop forms untouched.
   // «قايمة المركب»: every lead also goes to the Apps Script (same /exec as book orders) → Google Sheet + welcome email.
   const LIST_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9g6PGoRBuyK1nep1U45EoSBAI0ZUKjI2wXaTdV7Iv-7HWHz-tJNj_yWPSWD4ZBElg/exec";
   const toList=(o)=>{ try{ fetch(LIST_ENDPOINT,{method:"POST",body:JSON.stringify(Object.assign({action:"subscribe",source:(location.pathname.split("/").pop()||"index.html")},o)),mode:"no-cors"}).catch(()=>{}); }catch(_){ } };
@@ -198,7 +200,7 @@ const hdr=document.getElementById('hdr');
       if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ subForm.email.focus(); subForm.email.style.borderColor='#e0894f'; return; }
       const done=()=>{ subForm.style.display='none'; const d=document.getElementById('subDone'); if(d) d.style.display='block'; };
       if(SUBSCRIBE_ENDPOINT){
-        fetch(SUBSCRIBE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name:name||'-',email,_replyto:email,_subject:'اشتراك جديد — ابقَ على المركب (Life Ark)',_template:'table',_captcha:'false'})}).catch(()=>{});
+        fetch(SUBSCRIBE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name:name||'-',email,_replyto:email,_subject:'اشتراك جديد — ابقَ على المركب (Life Ark)',_template:'table',_captcha:'false',_cc:'greecemichael42@gmail.com'})}).catch(()=>{});
         toList({name:name,email:email});
         done();
       } else {
@@ -236,7 +238,7 @@ const hdr=document.getElementById('hdr');
         name, email, whatsapp:wa,
         profession:ef.profession.value, experience:ef.experience.value, dbt_experience:ef.dbt_level.value, format:ef.format.value,
         goal:(ef.goal.value||'').trim()||'-',
-        _replyto:email, _subject:'تسجيل اهتمام — تدريب DBT للمتخصصين (Life Ark)', _template:'table', _captcha:'false'
+        _replyto:email, _subject:'تسجيل اهتمام — تدريب DBT للمتخصصين (Life Ark)', _template:'table', _captcha:'false',_cc:'greecemichael42@gmail.com'
       })}).catch(()=>{});
       toList({name:name,email:email,welcome:false,source:'professionals'});
       eView.style.display='none'; eDone.style.display='block'; const c=enrollModal.querySelector('.modal-card'); if(c) c.scrollTop=0;
@@ -707,7 +709,7 @@ const hdr=document.getElementById('hdr');
           heard_about:gf.heard.value, referred:gf.referred.value,
           therapist_name:isReferred()?((gf.therapist_name.value||'').trim()||'-'):'—',
           preferred_day:gf.preferred_day.value, reason:(gf.reason.value||'').trim()||'-',
-          _replyto:email, _subject:'طلب انضمام لجروب المهارات — Life Ark', _template:'table', _captcha:'false'
+          _replyto:email, _subject:'طلب انضمام لجروب المهارات — Life Ark', _template:'table', _captcha:'false',_cc:'greecemichael42@gmail.com'
         })}).catch(function(){});
       }catch(_){}
       toList({name:name,email:email,welcome:false,source:'group-apply'});
@@ -769,7 +771,7 @@ const hdr=document.getElementById('hdr');
       try{
         fetch('https://formsubmit.co/ajax/Life.ark.psych@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({
           name:name, whatsapp:wa, email:email||'-', course:(aif.course.value||'كل الدورات / All courses'), message:(aif.message.value||'').trim()||'-',
-          _replyto:(email||undefined), _subject:'تسجيل اهتمام بالأكاديمية — Life Ark', _template:'table', _captcha:'false'
+          _replyto:(email||undefined), _subject:'تسجيل اهتمام بالأكاديمية — Life Ark', _template:'table', _captcha:'false',_cc:'greecemichael42@gmail.com'
         })}).catch(function(){});
       }catch(_){}
       if(email) toList({name:name,email:email,welcome:false,source:'academy'});
@@ -1392,7 +1394,7 @@ const hdr=document.getElementById('hdr');
       post({
         'الطلب': 'مقابلة تقييم مجانية — جروب المهارات', 'الاسم': name, 'الإيميل': email, 'واتساب': wa,
         'المصدر': 'بوب-أب الهوم (فانوس الجروب)', 'الصفحة': location.href,
-        email: email, _replyto: email, _subject: 'طلب مقابلة تقييم مجانية — جروب المهارات (من الموقع)', _template: 'table', _captcha: 'false',
+        email: email, _replyto: email, _subject: 'طلب مقابلة تقييم مجانية — جروب المهارات (من الموقع)', _template: 'table', _captcha: 'false', _cc: 'greecemichael42@gmail.com',
         _autoresponse:
           'أهلًا ' + name + '،\n\n' +
           'وصلنا طلبك لمقابلة التقييم المجانية الخاصة بجروب مهارات DBT أونلاين.\n' +
@@ -1411,7 +1413,7 @@ const hdr=document.getElementById('hdr');
       post({
         'الطلب': 'فصل «ركوب الموج» الهدية', 'الاسم': name, 'الإيميل': email,
         'المصدر': 'بوب-أب الهوم (فانوس الجروب)', 'الصفحة': location.href,
-        email: email, _replyto: email, _subject: 'طلب فصل «ركوب الموج» الهدية (من الموقع)', _template: 'table', _captcha: 'false',
+        email: email, _replyto: email, _subject: 'طلب فصل «ركوب الموج» الهدية (من الموقع)', _template: 'table', _captcha: 'false', _cc: 'greecemichael42@gmail.com',
         _autoresponse:
           'أهلًا ' + name + '،\n\n' +
           'ده الفصل الهدية من كتاب «رُكوب الموج» — فصل حل المشكلة:\n' + CHAPTER + '\n\n' +
@@ -1485,7 +1487,7 @@ const hdr=document.getElementById('hdr');
       var payload = {
         'الرسالة': msg, 'الاسم': name || '-', 'التواصل': contact || '-', 'موافق على التواصل': consent ? 'نعم' : 'لا', 'اشتراك في الرسالة الأسبوعية': subscribe ? 'نعم' : 'لا',
         'المقال': title, 'الرابط': location.href,
-        _subject: 'رسالة من قارئ — ' + title, _template: 'table', _captcha: 'false'
+        _subject: 'رسالة من قارئ — ' + title, _template: 'table', _captcha: 'false', _cc: 'greecemichael42@gmail.com'
       };
       if (email) payload._replyto = email;
       try { fetch('https://formsubmit.co/ajax/Life.ark.psych@gmail.com', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(payload) }).catch(function () {}); } catch (_) {}
