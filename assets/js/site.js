@@ -1584,6 +1584,7 @@ const hdr=document.getElementById('hdr');
 
     // ---- 3) «اقرأ أيضًا» — two neighbours, after the write-box (the last thing on the page is a next read)
     var A = {
+      'article-self-forgiveness': ['لا طريق إلى السماء دون المرور بالجحيم', 'No Road to Heaven Without Passing Through Hell', 'الذنب ومغفرة النفس', 'Guilt &amp; Self-Forgiveness'],
       'article-grief': ['حين يصبح التعافي خيانة', 'When Recovery Becomes Betrayal', 'الحزن والفقد', 'Grief &amp; Loss'],
       'article-trauma-lens': ['حين تتحوّل الصدمة النفسية إلى تفسير لكل شيء!', 'When Trauma Becomes the Explanation for Everything', 'التشخيص و الصدمات', 'Diagnosis &amp; Trauma'],
       'article-survivor': ['لا تنزع سلاح الناجي', 'Do Not Disarm the Survivor', 'علاج الصدمات', 'Trauma Therapy'],
@@ -1604,7 +1605,8 @@ const hdr=document.getElementById('hdr');
       'article-adhd': ['ADHD: ما وراء الصورة الشائعة', 'ADHD: Beyond the Common Picture', 'فرط الحركة وتشتت الانتباه', 'ADHD']
     };
     var R = {
-      'article-grief': ['article-healing', 'article-divorce'],
+      'article-self-forgiveness': ['article-grief', 'article-eden'],
+      'article-grief': ['article-self-forgiveness', 'article-healing'],
       'article-trauma-lens': ['article-survivor', 'article-amina-trauma'],
       'article-survivor': ['article-trauma-lens', 'article-amina-trauma'],
       'article-utopia': ['article-dbt', 'article-pain'],
