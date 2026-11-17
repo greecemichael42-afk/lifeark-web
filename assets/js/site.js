@@ -1584,6 +1584,7 @@ const hdr=document.getElementById('hdr');
 
     // ---- 3) «اقرأ أيضًا» — two neighbours, after the write-box (the last thing on the page is a next read)
     var A = {
+      'article-grief': ['حين يصبح التعافي خيانة', 'When Recovery Becomes Betrayal', 'الحزن والفقد', 'Grief &amp; Loss'],
       'article-trauma-lens': ['حين تتحوّل الصدمة النفسية إلى تفسير لكل شيء!', 'When Trauma Becomes the Explanation for Everything', 'التشخيص و الصدمات', 'Diagnosis &amp; Trauma'],
       'article-survivor': ['لا تنزع سلاح الناجي', 'Do Not Disarm the Survivor', 'علاج الصدمات', 'Trauma Therapy'],
       'article-utopia': ['محدش طلب منك تكون حكيم المدينة', 'Nobody Asked You to Be the Sage of the City', 'العلاج و حدوده', 'Therapy &amp; Its Limits'],
@@ -1603,15 +1604,16 @@ const hdr=document.getElementById('hdr');
       'article-adhd': ['ADHD: ما وراء الصورة الشائعة', 'ADHD: Beyond the Common Picture', 'فرط الحركة وتشتت الانتباه', 'ADHD']
     };
     var R = {
+      'article-grief': ['article-healing', 'article-divorce'],
       'article-trauma-lens': ['article-survivor', 'article-amina-trauma'],
       'article-survivor': ['article-trauma-lens', 'article-amina-trauma'],
       'article-utopia': ['article-dbt', 'article-pain'],
       'article-amina-trauma': ['article-survivor', 'article-trauma-lens'],
       'article-abandonment': ['article-healing', 'article-bpd'],
-      'article-healing': ['article-abandonment', 'article-divorce'],
+      'article-healing': ['article-grief', 'article-abandonment'],
       'article-dbt': ['article-utopia', 'article-pain'],
       'article-pain': ['article-dbt', 'article-utopia'],
-      'article-divorce': ['article-healing', 'article-values'],
+      'article-divorce': ['article-grief', 'article-healing'],
       'article-covid': ['article-values', 'article-eden'],
       'article-values': ['article-covid', 'article-divorce'],
       'article-supernova': ['article-procrustes', 'article-eden'],
