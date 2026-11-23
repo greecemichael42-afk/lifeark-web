@@ -1584,6 +1584,7 @@ const hdr=document.getElementById('hdr');
 
     // ---- 3) «اقرأ أيضًا» — two neighbours, after the write-box (the last thing on the page is a next read)
     var A = {
+      'article-crushed-dreams': ['أحلام مطحونة في علب حلوى على شكل قلب', 'Crushed Dreams in Heart-Shaped Candy Boxes', 'الحب والوحدة', 'Love &amp; Loneliness'],
       'article-self-forgiveness': ['لا طريق إلى السماء دون المرور بالجحيم', 'No Road to Heaven Without Passing Through Hell', 'الذنب ومغفرة النفس', 'Guilt &amp; Self-Forgiveness'],
       'article-grief': ['حين يصبح التعافي خيانة', 'When Recovery Becomes Betrayal', 'الحزن والفقد', 'Grief &amp; Loss'],
       'article-trauma-lens': ['حين تتحوّل الصدمة النفسية إلى تفسير لكل شيء!', 'When Trauma Becomes the Explanation for Everything', 'التشخيص و الصدمات', 'Diagnosis &amp; Trauma'],
@@ -1605,13 +1606,14 @@ const hdr=document.getElementById('hdr');
       'article-adhd': ['ADHD: ما وراء الصورة الشائعة', 'ADHD: Beyond the Common Picture', 'فرط الحركة وتشتت الانتباه', 'ADHD']
     };
     var R = {
+      'article-crushed-dreams': ['article-abandonment', 'article-self-forgiveness'],
       'article-self-forgiveness': ['article-grief', 'article-eden'],
       'article-grief': ['article-self-forgiveness', 'article-healing'],
       'article-trauma-lens': ['article-survivor', 'article-amina-trauma'],
       'article-survivor': ['article-trauma-lens', 'article-amina-trauma'],
       'article-utopia': ['article-dbt', 'article-pain'],
       'article-amina-trauma': ['article-survivor', 'article-trauma-lens'],
-      'article-abandonment': ['article-healing', 'article-bpd'],
+      'article-abandonment': ['article-crushed-dreams', 'article-healing'],
       'article-healing': ['article-grief', 'article-abandonment'],
       'article-dbt': ['article-utopia', 'article-pain'],
       'article-pain': ['article-dbt', 'article-utopia'],
