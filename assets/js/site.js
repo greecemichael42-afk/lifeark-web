@@ -286,7 +286,7 @@ const hdr=document.getElementById('hdr');
       {k:'العقل الصافي', ar:'حوّل قيمة الكتاب (800 ج.م / $50) إلى:', en:'Transfer the book price (800 EGP / $50) to:'},
       {k:'المِيزان', ar:'حوّل قيمة الكتاب (450 ج.م / $30) إلى:', en:'Transfer the book price (450 EGP / $30) to:'},
       {k:'اليقظة الذهنية', ar:'حوّل قيمة الكتاب (1000 ج.م / $50) إلى:', en:'Transfer the book price (1000 EGP / $50) to:'},
-      {k:'عادت إلى الجحيم', ar:'حوّل قيمة الكتاب (500 ج.م) إلى:', en:'Transfer the book price (500 EGP) to:'}
+      {k:'عادت إلى الجحيم', ar:'حوّل قيمة الكتاب (500 ج.م / $50) إلى:', en:'Transfer the book price (500 EGP / $50) to:'}
     ];
     const orderFeeAr=document.getElementById('orderFeeAr'), orderFeeEn=document.getElementById('orderFeeEn');
     const updateOrderFee=(product)=>{ const m=ORDER_PRICES.find(p=>(product||'').indexOf(p.k)>=0);
